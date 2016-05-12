@@ -1,0 +1,444 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (c) 2013 Ultra Electronics Limited. All rights reserved. -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://weather.common.schema.ultra-as.com" xmlns:common="http://common.schema.ultra-as.com" targetNamespace="http://weather.common.schema.ultra-as.com" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.0">
+    <xs:import namespace="http://common.schema.ultra-as.com" schemaLocation="CommonTypes.xsd"/>
+    <xs:annotation>
+        <xs:documentation>XML types used in messages for weatrher report information</xs:documentation>
+    </xs:annotation>
+    <xs:simpleType name="CAVOK">
+        <xs:annotation>
+            <xs:documentation>Sky is clear with good visibility</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:boolean"/>
+    </xs:simpleType>
+    <xs:simpleType name="CloudHeight">
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="3"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="CloudLayer">
+        <xs:annotation>
+            <xs:documentation>Contains cloud type and height values</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="CloudAmount" type="CloudAmount" nillable="true" minOccurs="0"/>
+            <xs:element name="CloudType" type="CloudType" nillable="true" minOccurs="0"/>
+            <xs:element name="CloudHeight" type="CloudHeight" nillable="true" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="CloudType">
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="3"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="CloudAmount">
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="3"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Correction">
+        <xs:annotation>
+            <xs:documentation>Indicates this is a correction or amendment to a previous METAR, SPECI or TAF</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Y"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="CurrentWeather">
+        <xs:annotation>
+            <xs:documentation>Concatenation of Intensity,Descriptor and Precipitation groups</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="20"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="DewPoint">
+        <xs:annotation>
+            <xs:documentation>Current dew point</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:double"/>
+    </xs:simpleType>
+    <xs:simpleType name="Direction">
+         <xs:restriction base="xs:string">
+            <xs:length value="3"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Distance">
+        <xs:restriction base="xs:integer">
+            <xs:minInclusive value="0"/>
+            <xs:maxInclusive value="9999"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="ForecastWeather">
+        <xs:annotation>
+            <xs:documentation>Two-digit code calculated from forecast weather conditions</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:integer">
+            <xs:minInclusive value="0"/>
+            <xs:maxInclusive value="99"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="GustSpeed">
+        <xs:restriction base="xs:integer">
+            <xs:minInclusive value="0"/>
+            <xs:maxInclusive value="999"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="MaxTemperature">
+        <xs:sequence>
+            <xs:element name="Temperature" type="Temperature" nillable="true" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Maximum forecast temperature</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Time" type="Time" nillable="true" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Time max temp is forecast to occur</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="MinTemperature">
+        <xs:sequence>
+            <xs:element name="Temperature" type="Temperature" nillable="true" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Minimum forecast temperature</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Time" type="Time" nillable="true" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Time min temperature is forecast to occur</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="ReportIdentification">
+        <xs:sequence>
+            <xs:element name="StationID" type="StationID" nillable="false"/>
+            <xs:element name="ReportDateTime" type="xs:dateTime" nillable="false"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="Speed">
+        <xs:restriction base="xs:integer">
+            <xs:minInclusive value="0"/>
+            <xs:maxInclusive value="999"/>
+        </xs:restriction>
+    </xs:simpleType>
+        <xs:complexType name="RunwayVisualRange">
+        <xs:annotation>
+            <xs:documentation>Details of observed runway visual range</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="RunwayID" type="common:RunwayID" nillable="true" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>runway identifier</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Variable" type="Distance" nillable="true" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>visual range is variable</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Distance" type="Distance" nillable="true" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Distance of visual range</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Units" type="Units" nillable="true" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Visual Range units of measurement, FT or M</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="StationID">
+        <xs:annotation>
+            <xs:documentation>4-letter ICAO code of airport</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:length value="4"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Temperature">
+        <xs:annotation>
+            <xs:documentation>Simple type to describe temperature</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:double"/>
+    </xs:simpleType>
+    <xs:simpleType name="Time">
+        <xs:restriction base="xs:dateTime"/>
+    </xs:simpleType>
+    <xs:simpleType name="Trend">
+        <xs:annotation>
+            <xs:documentation>Indicate type of trend: FM, TEMPO, BCMG</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="FM"/>
+            <xs:enumeration value="TEMPO"/>
+            <xs:enumeration value="BECMG"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="TrendProbability">
+        <xs:annotation>
+            <xs:documentation>For PROB trend indicate the p% probability</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:integer">
+            <xs:minInclusive value="0"/>
+            <xs:maxInclusive value="99"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="TrendSequenceNo">
+        <xs:annotation>
+            <xs:documentation>0 for initial forecast, increasing sequence number for each trend in a TAF</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:integer">
+            <xs:minInclusive value="0"/>
+            <xs:maxInclusive value="99"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Units">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="KMH"/>
+            <xs:enumeration value="KT"/>
+            <xs:enumeration value="MPS"/>
+			<xs:enumeration value="FT"/>
+			<xs:enumeration value="M"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="ValidTime">
+        <xs:annotation>
+            <xs:documentation>Date/time the weather readings are for on in the case of forecast - the time the forecvast was issued</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:dateTime"/>
+    </xs:simpleType>
+    <xs:simpleType name="Variable">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Y"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Visibility">
+        <xs:annotation>
+            <xs:documentation>Prevailing Visibility</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="11"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="Wind">
+        <xs:annotation>
+            <xs:documentation>Details of observed wind conditions</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="Variable" type="Variable" nillable="true" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Wind is variable</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Direction" type="Direction" nillable="true" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Wind direction</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Speed" type="Speed" nillable="true" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Wind speed</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="GustSpeed" type="GustSpeed" nillable="true" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Wind gust speed</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Units" type="Units" nillable="true" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Wind speed units of measurement, KMH, KT or MPS</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="Intensity">
+		<xs:restriction base="xs:string">
+        	<xs:enumeration value="-">
+        		<xs:annotation>
+            		<xs:documentation>Light</xs:documentation>
+            	</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="+">
+				<xs:annotation>
+            		<xs:documentation>Heavy</xs:documentation>
+            	</xs:annotation>
+            </xs:enumeration>
+			<xs:enumeration value="VC">
+				<xs:annotation>
+            		<xs:documentation>In the vicinity</xs:documentation>
+            	</xs:annotation>
+            </xs:enumeration>
+         </xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Descriptor">
+		<xs:restriction base="xs:string">
+        	<xs:enumeration value="MI">
+        		<xs:annotation>
+            		<xs:documentation>Shallow</xs:documentation>
+            	</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="PR">
+				<xs:annotation>
+            		<xs:documentation>Partial</xs:documentation>
+            	</xs:annotation>
+            </xs:enumeration>
+			<xs:enumeration value="BC">
+				<xs:annotation>
+            		<xs:documentation>Patches</xs:documentation>
+            	</xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="DR">
+        		<xs:annotation>
+            		<xs:documentation>Low drifting</xs:documentation>
+            	</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="BL">
+				<xs:annotation>
+            		<xs:documentation>Blowing</xs:documentation>
+            	</xs:annotation>
+            </xs:enumeration>
+			<xs:enumeration value="SH">
+				<xs:annotation>
+            		<xs:documentation>Showers</xs:documentation>
+            	</xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="TS">
+        		<xs:annotation>
+            		<xs:documentation>Thunderstorm</xs:documentation>
+            	</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="FZ">
+				<xs:annotation>
+            		<xs:documentation>Freezing</xs:documentation>
+            	</xs:annotation>
+            </xs:enumeration>			
+         </xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Precipitation">
+		<xs:restriction base="xs:string">
+        	<xs:enumeration value="DZ">
+        		<xs:annotation>
+            		<xs:documentation>Drizzle</xs:documentation>
+            	</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="SN">
+				<xs:annotation>
+            		<xs:documentation>Snow</xs:documentation>
+            	</xs:annotation>
+            </xs:enumeration>
+			<xs:enumeration value="SG">
+				<xs:annotation>
+            		<xs:documentation>Snow Grains</xs:documentation>
+            	</xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="IC">
+        		<xs:annotation>
+            		<xs:documentation>Ice Crystals</xs:documentation>
+            	</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="PL">
+				<xs:annotation>
+            		<xs:documentation>Ice Pellets</xs:documentation>
+            	</xs:annotation>
+            </xs:enumeration>
+			<xs:enumeration value="GR">
+				<xs:annotation>
+            		<xs:documentation>Hail</xs:documentation>
+            	</xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="GS">
+        		<xs:annotation>
+            		<xs:documentation>Small Hail</xs:documentation>
+            	</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="UP">
+				<xs:annotation>
+            		<xs:documentation>Unknown Precipitation</xs:documentation>
+            	</xs:annotation>
+            </xs:enumeration>
+			<xs:enumeration value="RA">
+				<xs:annotation>
+            		<xs:documentation>Rain</xs:documentation>
+            	</xs:annotation>
+            </xs:enumeration>
+         </xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Obscuration">
+		<xs:restriction base="xs:string">
+        	<xs:enumeration value="FG">
+        		<xs:annotation>
+            		<xs:documentation>Fog</xs:documentation>
+            	</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="VA">
+				<xs:annotation>
+            		<xs:documentation>Volcanic Ash</xs:documentation>
+            	</xs:annotation>
+            </xs:enumeration>
+			<xs:enumeration value="BR">
+				<xs:annotation>
+            		<xs:documentation>Mist</xs:documentation>
+            	</xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="HZ">
+        		<xs:annotation>
+            		<xs:documentation>Haze</xs:documentation>
+            	</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="DU">
+				<xs:annotation>
+            		<xs:documentation>Widespread Dust</xs:documentation>
+            	</xs:annotation>
+            </xs:enumeration>
+			<xs:enumeration value="FU">
+				<xs:annotation>
+            		<xs:documentation>Smoke</xs:documentation>
+            	</xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="SA">
+        		<xs:annotation>
+            		<xs:documentation>Sand</xs:documentation>
+            	</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="PY">
+				<xs:annotation>
+            		<xs:documentation>Spray</xs:documentation>
+            	</xs:annotation>
+            </xs:enumeration>			
+         </xs:restriction>
+	</xs:simpleType>
+    <xs:simpleType name="Other">
+		<xs:restriction base="xs:string">
+        	<xs:enumeration value="SQ">
+        		<xs:annotation>
+            		<xs:documentation>Squall</xs:documentation>
+            	</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="PO">
+				<xs:annotation>
+            		<xs:documentation>Dust or Sand Whirls</xs:documentation>
+            	</xs:annotation>
+            </xs:enumeration>
+			<xs:enumeration value="DS">
+				<xs:annotation>
+            		<xs:documentation>Duststorm</xs:documentation>
+            	</xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="SS">
+        		<xs:annotation>
+            		<xs:documentation>Sandstorm</xs:documentation>
+            	</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="FC">
+				<xs:annotation>
+            		<xs:documentation>Funnel Cloud</xs:documentation>
+            	</xs:annotation>
+            </xs:enumeration>				
+         </xs:restriction>
+	</xs:simpleType>
+</xs:schema>

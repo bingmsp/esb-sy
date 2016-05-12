@@ -1,0 +1,771 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (c) 2012 Ultra Electronics Limited. All rights reserved. -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://billing.common.schema.ultra-as.com" targetNamespace="http://billing.common.schema.ultra-as.com" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.0">
+	<xs:annotation>
+		<xs:documentation>XML types used in messages for billing information</xs:documentation>
+	</xs:annotation>
+	<xs:simpleType name="BillRecordType">
+		<xs:annotation>
+			<xs:documentation> Bill Record Type.
+			FA for flight arrival records. 
+			FD for flight departure records. 
+			MV for movements records. 
+			FE for flight energy records
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="FA"/>
+			<xs:enumeration value="FD"/>
+			<xs:enumeration value="MV"/>
+			<xs:enumeration value="FE"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AirCraftWingspanCode">
+		<xs:annotation>
+			<xs:documentation>AirCraft WingSpan code</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="2"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="EmissionPollutionCode">
+		<xs:annotation>
+			<xs:documentation>Emission Pollution Code</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="1"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="EmissionClass">
+		<xs:annotation>
+			<xs:documentation>Emission Class</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:decimal">
+			<xs:totalDigits value="7"/>
+			<xs:fractionDigits value="2"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ICAOFirstLanding">
+		<xs:annotation>
+			<xs:documentation>ICAO First Landing</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="4"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ICAOLastLanding">
+		<xs:annotation>
+			<xs:documentation>ICAO Last Landing</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="4"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="EnergyOnDateTime">
+		<xs:annotation>
+			<xs:documentation>Engergy On Date and time</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:dateTime"/>
+	</xs:simpleType>
+	<xs:simpleType name="EnergyOffDateTime">
+		<xs:annotation>
+			<xs:documentation> Energy Off Date and time</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:dateTime"/>
+	</xs:simpleType>
+	<xs:simpleType name="AirConOnDateTime">
+		<xs:annotation>
+			<xs:documentation>Air Con On Date and time</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:dateTime"/>
+	</xs:simpleType>
+	<xs:simpleType name="AirConOffDateTime">
+		<xs:annotation>
+			<xs:documentation>Air Con Off Date and time</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:dateTime"/>
+	</xs:simpleType>
+	<xs:simpleType name="BillRunNumber">
+		<xs:annotation>
+			<xs:documentation>Bill Run Number</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:long">
+			<xs:minInclusive value="0"/>
+			<xs:maxInclusive value="999999999999999999"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AircraftSeriesType">
+		<xs:annotation>
+			<xs:documentation>Aircraft Type Series</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="5"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="FlightRulesType">
+		<xs:annotation>
+			<xs:documentation>Type of Flight Rules (I,V,Z,Y) </xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="1"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="FlightPlanType">
+		<xs:annotation>
+			<xs:documentation>Flight Plan type of Flight</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="1"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="FlightCategory">
+		<xs:annotation>
+			<xs:documentation>Flight Category</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:integer">
+			<xs:minInclusive value="0"/>
+			<xs:maxInclusive value="99"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AmendmentType">
+		<xs:annotation>
+			<xs:documentation>For Distribution services, this indicates the
+                operation made to the data within the AODB (Create, Update, Delete).
+            </xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Create"/>
+			<xs:enumeration value="Delete"/>
+			<xs:enumeration value="Update"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="FlightIdentity">
+		<xs:annotation>
+			<xs:documentation>Identity of the flight. This is typically comprised
+                of flight carrier, flight number and an optional suffix. For general
+                aviation flights the format is free text.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="8"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AircraftRegistration">
+		<xs:annotation>
+			<xs:documentation>Aircraft registration.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="10"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AccountCode">
+		<xs:annotation>
+			<xs:documentation>Flight account code; derived from the aircraft's
+                registration for GA flights, or the airline IATA code for scheduled
+                flights; cash payers will have a code of 000.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="3"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="FlightType">
+		<xs:annotation>
+			<xs:documentation>Selected type code (GA flights or scheduled
+                flights) - used to filter messages.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="GeneralAviation"/>
+			<xs:enumeration value="Scheduled"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="StandPosition">
+		<xs:annotation>
+			<xs:documentation>Stand identity.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="8"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="WheelsDownDateTime">
+		<xs:annotation>
+			<xs:documentation>Aircraft's touch-down time.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:dateTime"/>
+	</xs:simpleType>
+	<xs:simpleType name="WheelsUpDateTime">
+		<xs:annotation>
+			<xs:documentation>Aircraft's airborne time.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:dateTime"/>
+	</xs:simpleType>
+	<xs:simpleType name="ActualInBlockTime">
+		<xs:annotation>
+			<xs:documentation>Actual date and time of arrival on stand for an inbound aircraft.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:dateTime"/>
+	</xs:simpleType>
+	<xs:simpleType name="ActualOffBlockTime">
+		<xs:annotation>
+			<xs:documentation>Actual date and time of departure from stand for an outbound aircraft.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:dateTime"/>
+	</xs:simpleType>
+	<xs:simpleType name="AircraftWeight">
+		<xs:annotation>
+			<xs:documentation>Weight of the aircraft.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:integer">
+			<xs:maxInclusive value="99999999"/>
+			<xs:minInclusive value="0"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AircraftTypeICAOCode">
+		<xs:annotation>
+			<xs:documentation>ICAO assigned code for an aircraft type.
+            </xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="4"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AircraftNoiseLevel">
+		<xs:annotation>
+			<xs:documentation>Effective Perceived Noise Level (EPNL) of the
+                aircraft.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="3"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ICAOAirportCode">
+		<xs:annotation>
+			<xs:documentation>ICAO Airport code</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="4"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AirlineICAOCode">
+		<xs:annotation>
+			<xs:documentation>ICAO assigned code which uniquely defines an
+                airline.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:length value="3"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="FlightNumber">
+		<xs:annotation>
+			<xs:documentation>The number that is used to identify a flight -
+                forms part of the flight identity. The number is zero padded to
+                three digits (e.g. '73' will become '073').</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="4"/>
+			<xs:minLength value="1"/>
+			<xs:pattern value="[0-9]{1,4}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="HandlingAgentCode">
+		<xs:annotation>
+			<xs:documentation>assigned code defining a handling agent
+                providing
+                services for a particular flight.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="3"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TotalFreightWeight">
+		<xs:annotation>
+			<xs:documentation>Total weight of freight on board.
+            </xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:integer">
+			<xs:totalDigits value="7"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TransferCargoWeight">
+		<xs:annotation>
+			<xs:documentation>Total cargo weight to transfer.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:integer">
+			<xs:minInclusive value="0"/>
+			<xs:maxInclusive value="999999"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="FlightCancelCode">
+		<xs:annotation>
+			<xs:documentation>Indicates that a flight has been Cancelled or is Diverted or is Non-operational.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Cancelled"/>
+			<xs:enumeration value="Diverted"/>
+			<xs:enumeration value="Non-operational"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="LocalPassengerCount">
+		<xs:annotation>
+			<xs:documentation>Number of passengers on board flying to/from a
+                local destination.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:integer">
+			<xs:minInclusive value="0"/>
+			<xs:maxInclusive value="999"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TransitPassengerCount">
+		<xs:annotation>
+			<xs:documentation>Total number of passengers in transit.
+            </xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:integer">
+			<xs:minInclusive value="0"/>
+			<xs:maxInclusive value="999"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TouchAndGo">
+		<xs:annotation>
+			<xs:documentation>This is a flag set when a flight is a ‘Touch and Go’ – this is where the flight approaches but only touches the runway and takes off again due to a problem</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:boolean">
+			<xs:pattern value="false|true"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AircraftVisitSequence">
+		<xs:annotation>
+			<xs:documentation>The tow number associated with an ordered tow
+                sequence. Note: a long data type is used to ensure that XML
+                generation tools cater for very large integer values.
+            </xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:long">
+			<xs:minInclusive value="0"/>
+			<xs:maxInclusive value="999999999999999999"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="FlightID">
+		<xs:annotation>
+			<xs:documentation>FlightID is used by SafeGate in GOS-GXI Interface. This is mapped to APPN_ROW_ID in AODB. This is not mandatory in other projects.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="30"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="NoOfTakeoffLandings">
+		<xs:annotation>
+			<xs:documentation>Number of Take of and Landings – this maybe related to a touch and go flight i.e. the number of aborted attempts at landing, or it maybe due to a training flight that is landind for a short period before taking off again</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:int">
+			<xs:minInclusive value="0"/>
+			<xs:maxInclusive value="99"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AirportIATACode">
+		<xs:annotation>
+			<xs:documentation>IATA code of the airport associated with the flight.
+            </xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="3"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TotalCrewCount">
+		<xs:annotation>
+			<xs:documentation>Total number of crew on board.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:integer">
+			<xs:minInclusive value="0"/>
+			<xs:maxInclusive value="99"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="InternationalPassengerCount">
+		<xs:annotation>
+			<xs:documentation>Number of passengers on board flying to/from
+                international destinations.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:integer">
+			<xs:minInclusive value="0"/>
+			<xs:maxInclusive value="999"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="DomesticPassengerCount">
+		<xs:annotation>
+			<xs:documentation>Total number of passengers on board that are
+                to/from a domestic sector.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:integer">
+			<xs:minInclusive value="0"/>
+			<xs:maxInclusive value="999"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ChildPassengerCount">
+		<xs:annotation>
+			<xs:documentation>Total number of child passengers on board.
+            </xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:integer">
+			<xs:minInclusive value="0"/>
+			<xs:maxInclusive value="999"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AdultPassengerCount">
+		<xs:annotation>
+			<xs:documentation>Total number of adult passengers on board.
+            </xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:integer">
+			<xs:minInclusive value="0"/>
+			<xs:maxInclusive value="999"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="InfantPassengerCount">
+		<xs:annotation>
+			<xs:documentation>Total number of adult passengers on board.
+            </xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:integer">
+			<xs:minInclusive value="0"/>
+			<xs:maxInclusive value="999"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TotalPassengerCount">
+		<xs:annotation>
+			<xs:documentation>Total number of passengers on board (including
+                terminal, transit and transfer components).</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:integer">
+			<xs:maxInclusive value="999"/>
+			<xs:minInclusive value="0"/>
+			<xs:totalDigits value="3"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TransferPassengerCount">
+		<xs:annotation>
+			<xs:documentation>Number of passengers on board who are transferring
+                to other flights.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:integer">
+			<xs:maxInclusive value="999"/>
+			<xs:minInclusive value="0"/>
+			<xs:totalDigits value="3"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TotalBaggageCount">
+		<xs:annotation>
+			<xs:documentation>Total number of bags on board.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:integer">
+			<xs:minInclusive value="0"/>
+			<xs:maxInclusive value="999"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="GateNumber">
+		<xs:annotation>
+			<xs:documentation>Gate identity.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="8"/>
+			<xs:minLength value="1"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="FlightSectorCode">
+		<xs:annotation>
+			<xs:documentation>The sector within which the flight operates (International, Domestic, Trans border).</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Domestic"/>
+			<xs:enumeration value="International"/>
+			<xs:enumeration value="Transborder"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="IsCompleteRecord">
+		<xs:annotation>
+			<xs:documentation>Boolean to indicate that a message contains all
+                available data for a particular record. If false then the record
+                contains only certain elements, typically indicating that data has
+                been updated, but nothing can be assumed about the values of
+                elements which are not included.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:boolean">
+			<xs:pattern value="false|true"/>
+		</xs:restriction>
+	</xs:simpleType>
+   <xs:simpleType name="AirportLocationID">
+        <xs:annotation>
+            <xs:documentation> AirportLocationID – this should be the IATA airport code for any specific data or null</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="3"/>
+            <xs:minLength value="3"/>
+        </xs:restriction>
+    </xs:simpleType>
+        <xs:simpleType name="PreValidated">
+        <xs:annotation>
+            <xs:documentation>true or false, default true if omitted. 
+            If true then only records that have been pre-validated by the AODB will be returned, otherwise non-validated records will be returned. 
+            “False” is typically used for requesting details for immediate cash payments.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="true"/>
+            <xs:enumeration value="false"/>
+        </xs:restriction>
+    </xs:simpleType>
+   <xs:simpleType name="BillDataStatus">
+        <xs:annotation>
+            <xs:documentation>The status of the billing data download. COMPLETE means the billing system has finished downloading all the data</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+           <xs:enumeration value="COMPLETE"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="CashBillStatus">
+        <xs:annotation>
+            <xs:documentation>Billing flag showing the current bill status: L = locked, M = marked for billing, C = checked for billing, p = cash bill paid</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+           <xs:enumeration value="L"/>
+           <xs:enumeration value="M"/>
+           <xs:enumeration value="C"/>
+           <xs:enumeration value="P"/>
+        </xs:restriction>
+    </xs:simpleType> 
+        <xs:simpleType name="FlightNatureCode">
+        <xs:annotation>
+            <xs:documentation>The code defining the nature of the flight. For example
+    ‘CAR’ = Cargo flight
+    ‘CGO’ = Cargo flight
+    ‘CHT’ = Charter flight
+    ‘CRW’ = Crew only flight
+    ‘FER’ = Ferry Flight
+    ‘FRY’ = Ferry flight
+    ‘GA’ = General Aviation flight
+    ‘GAS’ = Fuel stop
+    ‘GEN’ = General flight
+    ‘JNT’ = Joint flight
+    ‘MAP’ = Missed App.
+    ‘MIL’ = Military flight
+    ‘MLT’ = Military flight
+    ‘NFY’ = Not Approved
+    ‘NRV’ = Non-Revenue
+    ‘PAX’ = Passenger flight
+    ‘RFG’ = Refugee flight
+    ‘SPC’ = Special flight
+    ‘STP’ = Technical Stop
+    ‘TNG’ = Training
+    ‘TST’ = Technical Test 
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="3"/>
+        </xs:restriction>
+    </xs:simpleType>
+        <xs:simpleType name="FlightServiceTypeIATACode">
+        <xs:annotation>
+            <xs:documentation>IATA assigned code for type of flight service.
+            ‘A’ = additional cargo/mail
+            ‘B’ = additional passenger shuttle
+            ‘C’ = passenger charter
+            ‘D’ =General Aviation
+            ‘E’ = special(FAA) - government charter
+            ‘F’ = cargo scheduled
+            ‘G’ = additional passenger scheduled
+            ‘H’ = cargo charter
+            ‘I’ = Diplomatic/VIP
+            ‘J’ = passenger scheduled
+            ‘K’ = training
+            ‘L’ = search and rescue
+            ‘M’ = mail scheduled
+            ‘N’ = creation of E9Z flights
+            ‘O’ = charter flight(transit)
+            ‘P’ = positioning(non revenue)
+            ‘Q’ = passenger/cargo combi scheduled
+            ‘R’ = Return to base (tech. problem)
+            ‘S’ = diversions
+            ‘T’ = Technical Test
+            ‘U’ = air ambulance
+            ‘V’ = air taxi with PAX
+            ‘W’ = Military
+            ‘X’ = technical stop
+            ‘Y’ = flights with flight number not for fids
+            ‘Z’ = slot blocked non fids
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:length value="1"/>
+        </xs:restriction>
+    </xs:simpleType>
+        <xs:simpleType name="RunwayID">
+        <xs:annotation>
+            <xs:documentation>Runway identity (e.g. 27L, 09R, 23).
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="8"/>
+        </xs:restriction>
+    </xs:simpleType>
+        <xs:simpleType name="PassengerBoardingBridge">
+        <xs:annotation>
+            <xs:documentation>Passenger Boarding bridge name.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="8"/>
+        </xs:restriction>
+    </xs:simpleType>
+        <xs:simpleType name="PortOfCallICAOCode">
+        <xs:annotation>
+            <xs:documentation>The ICAO that details of an airport stop on a
+                flight itinerary.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="LocationICAOCode"/>
+    </xs:simpleType>
+    <xs:simpleType name="LocationICAOCode">
+        <xs:annotation>
+            <xs:documentation>ICAO assigned code for locations such as airports,
+                bus, rail and ferry stations.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:length value="4"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="AircraftSubtypeIATACode">
+        <xs:annotation>
+            <xs:documentation>IATA assigned code for an aircraft subtype.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:length value="3"/>
+        </xs:restriction>
+    </xs:simpleType>
+       <xs:simpleType name="AirlineIATACode">
+        <xs:annotation>
+            <xs:documentation>IATA assigned code defining an airline typically
+                two character passenger preferred).</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:minLength value="2"/>
+            <xs:maxLength value="3"/>
+        </xs:restriction>
+    </xs:simpleType>
+        <xs:simpleType name="ArrivedMailWeight">
+        <xs:annotation>
+            <xs:documentation>Weight of  mail arrived.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:integer">
+            <xs:minInclusive value="0"/>
+            <xs:maxInclusive value="999999"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="DepartingMailWeight">
+        <xs:annotation>
+            <xs:documentation>Weight of mail departing.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:integer">
+            <xs:minInclusive value="0"/>
+            <xs:maxInclusive value="999999"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="AircraftBodyType">
+        <xs:annotation>
+            <xs:documentation>Aircraft body type (W=Wide Body etc).
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="1"/>
+        </xs:restriction>
+    </xs:simpleType>
+        <xs:simpleType name="TransferBaggageCount">
+        <xs:annotation>
+            <xs:documentation>Total number of bags to transfer.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:integer">
+            <xs:minInclusive value="0"/>
+            <xs:maxInclusive value="9999"/>
+        </xs:restriction>
+    </xs:simpleType>
+        <xs:simpleType name="SnapshotEndDateTime">
+        <xs:annotation>
+            <xs:documentation>The data and time period the client requires a
+                snapshot to send data to.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:dateTime"/>
+    </xs:simpleType>
+    <xs:simpleType name="SnapshotFromDateTime">
+        <xs:annotation>
+            <xs:documentation>The point in time that the snapshot request should
+                be taken from.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:dateTime"/>
+    </xs:simpleType>
+    <xs:simpleType name="SnapshotStartDateTime">
+        <xs:annotation>
+            <xs:documentation>The data and time period the client requires a
+                snapshot to send data from.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:dateTime"/>
+    </xs:simpleType>
+        <xs:simpleType name="SubscriptionMode">
+        <xs:annotation>
+            <xs:documentation>The type of subscription required (SnapshotOnly,
+                SnapshotThenUpdates, UpdatesOnly).</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="SnapshotOnly"/>
+            <xs:enumeration value="SnapshotThenUpdates"/>
+            <xs:enumeration value="UpdatesOnly"/>
+        </xs:restriction>
+    </xs:simpleType>
+        <xs:simpleType name="RequestID">
+        <xs:annotation>
+            <xs:documentation>Unique identifier for a request made to the server
+                by a client. This is a unique number allocated by the client. It is
+                passed to the server in the request and is included by the server in
+                any replies to that request. This enables the client to send
+                multiple requests without waiting for the response to each one
+                before sending the next.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:integer">
+            <xs:minInclusive value="0"/>
+            <xs:maxInclusive value="999999"/>
+        </xs:restriction>
+    </xs:simpleType>
+        <xs:simpleType name="RequestType">
+        <xs:annotation>
+            <xs:documentation>The type of amendment a client requests the AODB to
+                make (Create, Update, Delete).</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Create"/>
+            <xs:enumeration value="Delete"/>
+            <xs:enumeration value="Update"/>
+        </xs:restriction>
+    </xs:simpleType>
+        <xs:simpleType name="ReportErrors">
+        <xs:annotation>
+            <xs:documentation> When used in Request type services (e.g. AFUS, RDUS, BDUS etc) this element can ensure that any database errors are reported all the way back to the client system. When this feature is used the client must ensure that any returned errors are flagged for manual intervention as there was a problem with the original request that must be fixed for the data to be accepted by the AODB.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:boolean">
+            <xs:pattern value="false|true"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="TotalInadmissiblePassengerCount">
+        <xs:annotation>
+            <xs:documentation> Total In admissible Passenger Count</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:integer">
+            <xs:minInclusive value="0"/>
+            <xs:maxInclusive value="999"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="TotalBaggageWeight">
+        <xs:annotation>
+            <xs:documentation> Total Baggage Weight</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:integer">
+            <xs:minInclusive value="0"/>
+            <xs:maxInclusive value="9999999"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

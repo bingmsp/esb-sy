@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (c) 2007 Ultra Electronics Limited. All rights reserved. -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://header.schema.ultra-as.com"
+	targetNamespace="http://header.schema.ultra-as.com" elementFormDefault="qualified"
+	attributeFormDefault="unqualified" version="2.0">
+	<xs:annotation>
+		<xs:documentation>Header schema used for all inter-system messages.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:complexType name="Header">
+		<xs:annotation>
+			<xs:documentation>Contains information on message type, routing, etc.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="MessageSentDateTime" type="MessageSentDateTime"
+				nillable="false" />
+			<xs:element name="MessageSequenceNumber" type="MessageSequenceNumber"
+				nillable="false" />
+			<xs:element name="MessageType" type="MessageType"
+				nillable="false" />
+			<xs:element name="SourceSystemID" type="SourceSystemID"
+				nillable="false" />
+			<xs:element name="DestinationSystemID" type="DestinationSystemID"
+				nillable="false" />
+			<xs:element name="MessageOriginatorID" type="MessageOriginatorID"
+				nillable="false" minOccurs="0" />
+			<xs:element name="OriginatorDateTime" type="OriginatorDateTime"
+				nillable="false" minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="DestinationSystemID">
+		<xs:annotation>
+			<xs:documentation>The intended target system the message is sent to.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="SystemID" />
+	</xs:simpleType>
+	<xs:simpleType name="MessageOriginatorID">
+		<xs:annotation>
+			<xs:documentation>The original system that create/sent the message.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="SystemID" />
+	</xs:simpleType>
+	<xs:simpleType name="MessageSentDateTime">
+		<xs:annotation>
+			<xs:documentation>Inserted by the sending system when the message is
+				prepared for sending.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:dateTime" />
+	</xs:simpleType>
+	<xs:simpleType name="MessageSequenceNumber">
+		<xs:annotation>
+			<xs:documentation>A sequence number set by the sending system. The
+				number may be used by the receiving system for message ordering or
+				checking, or for diagnostics purposes. The number should increment
+				by one for each subsequent message for a particular message type.
+				The number may wraparound or be reset.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:nonNegativeInteger">
+			<xs:minInclusive value="0" />
+			<xs:maxInclusive value="999999" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="MessageType">
+		<xs:annotation>
+			<xs:documentation>Indicates the message type contained within the
+				Body.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="100" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="OriginatorDateTime">
+		<xs:annotation>
+			<xs:documentation>Timestamp of the associated message when entered
+				into the system.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:dateTime" />
+	</xs:simpleType>
+	<xs:simpleType name="SourceSystemID">
+		<xs:annotation>
+			<xs:documentation>Identifier of system which is sending a message.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="SystemID" />
+	</xs:simpleType>
+	<xs:simpleType name="SystemID">
+		<xs:annotation>
+			<xs:documentation>An identifier for a system sending or receiving
+				messages.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="20" />
+		</xs:restriction>
+	</xs:simpleType>
+
+</xs:schema>

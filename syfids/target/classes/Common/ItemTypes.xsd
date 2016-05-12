@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (c) 2012 Ultra Electronics Limited. All rights reserved. -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://item.common.schema.ultra-as.com" targetNamespace="http://item.common.schema.ultra-as.com" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.0">
+	<xs:annotation>
+		<xs:documentation>XML types used in messages for fault report service</xs:documentation>
+	</xs:annotation>
+	<xs:simpleType name="AssetID">
+		<xs:annotation>
+			<xs:documentation>Identification of the asset that is reporting the fault. This maybe the hostname or other similar identifier.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="64"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="CatalogWebPage">
+		<xs:annotation>
+			<xs:documentation>Internet address for this catalog item, tool or service</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="250"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="CategoryName">
+		<xs:annotation>
+			<xs:documentation>Vendor's catalog or part number for the item, tool or service</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="30"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="DimensionUOMCode">
+		<xs:annotation>
+			<xs:documentation>Unit of measure used to order the item, such as DOZEN or CASE</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="16"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="HazardClassID">
+		<xs:annotation>
+			<xs:documentation>Material Safety Data Sheet number issed by the OSHA</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="10"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="HostName">
+		<xs:annotation>
+			<xs:documentation>Hostname of the asset.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="64"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="IPAddress">
+		<xs:annotation>
+			<xs:documentation>IP Address that identifies an IP based asset.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="ItemData">
+		<xs:annotation>
+			<xs:documentation>Information regarding an item</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="ItemCatalogGroup" type="ItemCatalogGroup" nillable="true" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="ItemCommodityCode" type="ItemCommodityCode" nillable="true" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="ItemDescription" type="ItemDescription" nillable="true" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="ItemNumber" type="ItemNumber" nillable="false" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="isRotatingAsset" type="xs:boolean" nillable="false" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="isInspectionRequired" type="xs:boolean" nillable="false" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="UnitOfMeasurement" type="UnitOfMeasurement" nillable="false" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="DimensionsUnitOfMeasureCode" type="DimensionUOMCode" nillable="false" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="HazardClassID" type="HazardClassID" nillable="true" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="ItemStatus" type="ItemStatus" nillable="false" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="Taxexempt" type="xs:boolean" nillable="false" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="ItemType" type="ItemType" nillable="false" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="SourceOrganizationID" type="SourceOrganizationID" nillable="false" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="Manufacturer" type="Manufacturer" nillable="true" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="ItemModelNumber" type="ItemModelNumber" nillable="true" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="CategoryName" type="CategoryName" nillable="true" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="isDefault" type="xs:boolean" nillable="true" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="LastPrice" type="LastPrice" nillable="true" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="CatalogWebPage" type="CatalogWebPage" nillable="true" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="OrganizationCode" type="OrganizationCode" nillable="false" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="LotControlCode" type="LotControlCode" nillable="false" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="isInventoryAssetItem" type="xs:boolean" nillable="true" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="ItemCatalogGroup">
+		<xs:annotation>
+			<xs:documentation>Identifies the commondity group, or product category</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="40"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ItemCommodityCode">
+		<xs:annotation>
+			<xs:documentation>Identifies the commondity code, associated with this item or tool</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="40"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ItemDescription">
+		<xs:annotation>
+			<xs:documentation>Item Description</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="240"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ItemModelNumber">
+		<xs:annotation>
+			<xs:documentation>The primary vendir's model number for the item or tool</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="8"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ItemNumber">
+		<xs:annotation>
+			<xs:documentation>Identifies the item record</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="81"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ItemStatus">
+		<xs:annotation>
+			<xs:documentation>Current status of the item, such as ACTIVE, PENDING, PLANNING, PENDOBS and OBSELETE</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="ACTIVE"/>
+			<xs:enumeration value="PENDING"/>
+			<xs:enumeration value="PLANNING"/>
+			<xs:enumeration value="PENDOBS"/>
+			<xs:enumeration value="OBSELETE"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ItemType">
+		<xs:annotation>
+			<xs:documentation>Item type, such as ITEM, STDSERVICE, TOOL</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="ITEM"/>
+			<xs:enumeration value="STDSERVICE"/>
+			<xs:enumeration value="TOOL"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="LastPrice">
+		<xs:annotation>
+			<xs:documentation>Last price received from the vendor</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:decimal">
+			<xs:totalDigits value="10"/>
+			<xs:fractionDigits value="2"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Location">
+		<xs:annotation>
+			<xs:documentation>Location of the asset raising the fault report.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="BOTH"/>
+			<xs:enumeration value="MCT"/>
+			<xs:enumeration value="SLL"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="LotControlCode">
+		<xs:annotation>
+			<xs:documentation>Lot control code</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="LOT"/>
+			<xs:enumeration value="NOLOT"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Manufacturer">
+		<xs:annotation>
+			<xs:documentation>Manufacturer of the item or tool</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="12"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="MeterSerialNumber">
+		<xs:annotation>
+			<xs:documentation>The serial number of the meter. This should uniquely identify the actual unit</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="20"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="MeterType">
+		<xs:annotation>
+			<xs:documentation>The utility type of the meter.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Electricity">
+				<xs:annotation>
+					<xs:documentation>This meter records consumption of electricity</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Water">
+				<xs:annotation>
+					<xs:documentation>TThis meter records consumption of water</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Chilled Water">
+				<xs:annotation>
+					<xs:documentation>This meter records consumption of chilled water</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="MeterReadingUnits">
+		<xs:annotation>
+			<xs:documentation>The units of consumption on the meter</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:integer">
+			<xs:maxInclusive value="99999999"/>
+			<xs:minInclusive value="0"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="MeterUnit">
+		<xs:annotation>
+			<xs:documentation>Unit used e.g. KW/h.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="10"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="OrganizationCode">
+		<xs:annotation>
+			<xs:documentation>Organization code</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="3"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="SourceOrganizationID">
+		<xs:annotation>
+			<xs:documentation>Actual vendor id</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="12"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="UnitOfMeasurement">
+		<xs:annotation>
+			<xs:documentation>Unit of measure used to issue the item, such as EACH or ROLL</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="25"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

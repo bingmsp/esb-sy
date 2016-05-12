@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://www.iata.org/IATA/2007/00" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.iata.org/IATA/2007/00"  elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0" id="IATA2012.1">
+	<xs:include schemaLocation="IATA_AIDX_CommonTypes.xsd" ></xs:include>
+	
+	<xs:element name="IATAAIDXFlightLeg">
+	<xs:annotation>
+			<xs:documentation>Used to send flight leg information when requested by the airport.</xs:documentation>
+	</xs:annotation>
+	<xs:complexType>
+		<xs:sequence>
+		<xs:element name="FlightLeg"  type="FlightLegType" />
+		</xs:sequence>
+	</xs:complexType>
+	</xs:element>
+</xs:schema>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (c) 2011 Ultra Electronics Limited. All rights reserved. -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:response="http://acceptresponse.ws.schema.ultra-as.com"
+	xmlns:common="http://common.schema.ultra-as.com" xmlns:hed="http://header.schema.ultra-as.com"
+	targetNamespace="http://acceptresponse.ws.schema.ultra-as.com"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	version="2.0">
+	<xs:annotation>
+		<xs:documentation>Accept Message - Response message.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:import namespace="http://common.schema.ultra-as.com"
+		schemaLocation="../Common/CommonTypes.xsd" />
+	<xs:import namespace="http://header.schema.ultra-as.com"
+		schemaLocation="../Common/Header.xsd" />
+	<xs:element name="Envelope">
+		<xs:annotation>
+			<xs:documentation>Top level element for all messages.
+			</xs:documentation>
+		</xs:annotation>
+      <xs:complexType>
+          <xs:sequence>
+             <xs:element name="Header" type="hed:Header" />
+             <xs:element name="Body" type="response:Body" />
+          </xs:sequence>
+       </xs:complexType>
+	</xs:element>	
+	<xs:complexType name="Body">
+		<xs:sequence>
+			<xs:element name="WSResponse" type="response:WSResponse" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="WSResponse">
+		<xs:annotation>
+			<xs:documentation>Sent by the service provider in response to a
+				request message. Contains the status of the update request and the
+				client's request ID (provided by the client during the request). A
+				status of accepted does not indicate that all element have been
+				updated successfully, only those that AODB deems the subscriber is
+				permitted to amend.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="DateTimeRequestReceived" type="common:DateTimeRequestReceived"
+				nillable="true" minOccurs="0" />
+			<xs:element name="RejectionReason" type="common:RejectionReason"
+				nillable="true" minOccurs="0" />
+			<xs:element name="WSRequestStatus" type="response:WSRequestStatus"
+				nillable="false" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="WSRequestStatus">
+		<xs:annotation>
+			<xs:documentation>The status of a request/poll from a client which
+				may be Accepted, Rejected, NoData or Unavailable.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Accepted" />
+			<xs:enumeration value="Rejected">
+				<xs:annotation>
+					<xs:documentation>"Rejected" implies there was a problem with the
+						request or the data. The client must therefore fix the problem,
+						and not resend the request unchanged.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="NoData">
+				<xs:annotation>
+					<xs:documentation>"NoData" indicates that there was no data
+						available from the IB service to return to the client.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Unavailable">
+				<xs:annotation>
+					<xs:documentation>"Unavailable" implies that there is a problem
+						with the IB service or the back-end system supplying the data. The
+						client can therefore try again later.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>
