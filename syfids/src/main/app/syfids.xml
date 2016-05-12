@@ -33,7 +33,7 @@ http://www.mulesoft.org/schema/mule/sftp http://www.mulesoft.org/schema/mule/sft
     
     <db:generic-config name="Generic_Database_Configuration" url="${conString1}" driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver" doc:name="Generic Database Configuration"/>
     <http:request-config name="HTTP_Request_Configuration" doc:name="HTTP Request Configuration">
-        <http:basic-authentication username="aodb" password="aodb"/>
+        <http:basic-authentication username="${wsuser}" password="${wspass}"/>
     </http:request-config>
     <sftp:connector name="SunCountrySFTP" identityFile="${pkey}" passphrase="${pw}" validateConnections="true" pollingFrequency="150000" archiveDir="${sftp.archiveDir}" doc:name="SFTP">
         <reconnect/>
