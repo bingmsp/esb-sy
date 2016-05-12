@@ -35,7 +35,7 @@ http://www.mulesoft.org/schema/mule/sftp http://www.mulesoft.org/schema/mule/sft
     <http:request-config name="HTTP_Request_Configuration" doc:name="HTTP Request Configuration">
         <http:basic-authentication username="aodb" password="aodb"/>
     </http:request-config>
-    <sftp:connector name="SunCountrySFTP" identityFile="${app.home}\classes\sftp_private.key" passphrase="Password1" validateConnections="true" pollingFrequency="150000" archiveDir="${sftp.archiveDir}" doc:name="SFTP">
+    <sftp:connector name="SunCountrySFTP" identityFile="${app.home}\classes\sftp_private.key" passphrase="##ChangePassword##" validateConnections="true" pollingFrequency="150000" archiveDir="${sftp.archiveDir}" doc:name="SFTP">
         <reconnect/>
     </sftp:connector>
 
