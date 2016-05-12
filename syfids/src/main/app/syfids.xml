@@ -33,12 +33,22 @@ http://www.mulesoft.org/schema/mule/sftp http://www.mulesoft.org/schema/mule/sft
     
     <db:generic-config name="Generic_Database_Configuration" url="${conString1}" driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver" doc:name="Generic Database Configuration"/>
     <http:request-config name="HTTP_Request_Configuration" doc:name="HTTP Request Configuration">
-        <http:basic-authentication username="aodb" password="aodb"/>
+        <http:basic-authentication username="${ultra.ws.user}" password="${ultra.ws.pass}"/>
     </http:request-config>
-    <sftp:connector name="SunCountrySFTP" identityFile="${app.home}\classes\sftp_private.key" passphrase="Password1" validateConnections="true" pollingFrequency="150000" archiveDir="${sftp.archiveDir}" doc:name="SFTP">
+    <sftp:connector name="sftpCon" identityFile="${sftp.pkey}" passphrase="${sftp.pass}" validateConnections="true" pollingFrequency="150000" archiveDir="${sftp.archiveDir}" doc:name="SFTP">
         <reconnect/>
     </sftp:connector>
-
+	
+	<flow name="stfpFlow">
+        <sftp:inbound-endpoint connector-ref="sftpCon" host="${sftp.host}" port="${sftp.port}" path="${sftp.path}" user="${sftp.user}" responseTimeout="10000" doc:name="SFTP"/>
+        <file:outbound-endpoint path="${incomingPath}" outputPattern="#[message.inboundProperties.originalFilename]" responseTimeout="10000" doc:name="File"/>
+        <catch-exception-strategy doc:name="Catch Exception Strategy">
+            <logger message="#[exception.exceptions]" level="ERROR" doc:name="Logger"/>
+            <set-payload value="Exception occurred getting Sun Country Flat file from sftp.mspairport.com: #['\n' + exception]" doc:name="Set Payload"/>
+            <smtp:outbound-endpoint host="${smtp.host}" port="${smtp.port}" to="${smtp.sendTo}" from="${smtp.from}" subject="${smtp.subject}" responseTimeout="10000" doc:name="SMTP"/>
+        </catch-exception-strategy>
+    </flow>
+	
     <flow name="IngestDataFromFlatFile">
         <file:inbound-endpoint path="${incomingPath}" responseTimeout="10000" doc:name="File" />
         <set-variable variableName="oFileName" value="#[message.inboundProperties.originalFilename]" doc:name="Save Original Filename"/>
@@ -88,6 +98,10 @@ http://www.mulesoft.org/schema/mule/sftp http://www.mulesoft.org/schema/mule/sft
                 <set-variable variableName="wsStatus" value="Success" doc:name="Set Response Status"/>
                 <logger level="INFO" doc:name="Logger" message="Successful Response: #[payload]"/>
             </when>
+            <when expression="#[xpath3('contains(//mule:IATA_AIDX_FlightLegRS/mule:Errors/mule:Error, &quot;linked&quot;)') ]">
+                <logger level="INFO" doc:name="Logger" message="Request failed with linked flight attached. Going to send request without linked flight info..."/>
+                <flow-ref name="ResendLinkedFlightRequestWithoutLinkedFlight" doc:name="ResendLinkedFlightRequestWithoutLinkedFlight"/>
+            </when>
             <otherwise>
                 <set-variable variableName="wsStatus" value="Fail" doc:name="Set Response Status"/>
                 <set-attachment attachmentName="SYUltraReq-#[flowVars.responseMessageId].xml" value="#[flowVars.oRequest]" contentType="application/xml" doc:name="Attachment"/>
@@ -98,9 +112,35 @@ http://www.mulesoft.org/schema/mule/sftp http://www.mulesoft.org/schema/mule/sft
         </choice>
         <flow-ref name="UpdateDb" doc:name="UpdateDb"/>
     </sub-flow>
+    <sub-flow name="ResendLinkedFlightRequestWithoutLinkedFlight">
+        <set-payload value="#[flowVars.oRequest]" doc:name="Change payload back to formatted rqeuest"/>
+        <mulexml:xslt-transformer xsl-file="xslt/noLinkFlight.xsl" maxIdleTransformers="2" maxActiveTransformers="5" doc:name="XSLT"/>
+        <set-variable variableName="lnkRequest" value="#[payload]" doc:name="Set Link Request"/>
+        <logger message="Removed Linked Flight Information: #[message.payloadAs(java.lang.String)+ '\n']Retrying request." level="INFO" doc:name="Logger"/>
+        <ws:consumer config-ref="Web_Service_Consumer" operation="IATA_AIDX_FlightLegNotifRQ" doc:name="Web Service Consumer"/>
+        <mulexml:dom-to-xml-transformer doc:name="DOM to XML"/>
+        <logger message="LinkedFlight-WS-Response: #[payload]" level="INFO" doc:name="Logger"/>
+        <set-variable variableName="lnkResponseMessageId" value="#[xpath3('/mule:IATA_AIDX_FlightLegRS/@CorrelationID')]" doc:name="Set Link Response Message Id"/>
+        <set-variable variableName="lnkResponse" value="#[payload]" doc:name="Save Link Response"/>
+        <choice doc:name="Choice">
+            <when expression="#[xpath3('count(//mule:IATA_AIDX_FlightLegRS/mule:Success)') != 0]">
+                <set-variable variableName="wsStatus" value="Success" doc:name="Set Response Status"/>
+                <logger level="INFO" doc:name="Logger" message="Successful Link Response: #[payload]"/>
+            </when>
+            <otherwise>
+                <set-variable variableName="wsStatus" value="Fail" doc:name="Set Link Response Status"/>
+                <set-attachment attachmentName="SYUltraReq-#[flowVars.responseMessageId].xml" value="#[flowVars.oRequest]" contentType="application/xml" doc:name="Attachment"/>
+                <set-payload value="Link Web Service Call Failed: #['\n\n']Response:#['\n']#[message.payloadAs(java.lang.String)]#['\n\n']&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;Filename: #[flowVars.oFileName]#['\n']&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;RowId: #[flowVars.oRowId]#['\n']&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;CorrelationId: #[flowVars.responseMessageId]" doc:name="Set Payload"/>
+                <logger message="#[payload]" level="INFO" doc:name="Log Failed Link Request"/>
+                <smtp:outbound-endpoint host="${smtp.host}" port="${smtp.port}" to="${smtp.sendTo}" from="${smtp.from}" subject="${smtp.subject}" responseTimeout="10000" doc:name="SMTP"/>
+            </otherwise>
+        </choice>
+        <flow-ref name="UpdateDb" doc:name="UpdateDb"/>
+    </sub-flow>
     <sub-flow name="UpdateDb">
         <db:update config-ref="Generic_Database_Configuration" doc:name="Database">
-            <db:parameterized-query><![CDATA[update SunCountryReqRes set statuscode=2 , response=#[flowVars.oResponse],status=#[flowVars.wsStatus],[timestamp]=getdate(),attempt=isnull(attempt,0)+1  where Id=#[flowVars.responseMessageId]]]></db:parameterized-query>
+            <db:parameterized-query><![CDATA[${updateQuery}]]></db:parameterized-query>
+
         </db:update>
         <logger message="flow complete." level="INFO" doc:name="Log flow complete"/>
     </sub-flow>
