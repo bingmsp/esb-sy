@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (c) 2013 Ultra Electronics Limited. All rights reserved. -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://task.common.schema.ultra-as.com" targetNamespace="http://task.common.schema.ultra-as.com" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.0">
+    <xs:annotation>
+        <xs:documentation>XML types used in messages for task information</xs:documentation>
+    </xs:annotation>
+    <xs:complexType name="Alert">
+        <xs:annotation>
+            <xs:documentation>Specification of an alerted aspect of Task</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="AlertType" type="AlertIntervalType" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="ResourceConstraintID" type="ResourceConstraintID" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="AlertDescription" type="AlertDescription" nillable="false" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="AlertDescription">
+        <xs:annotation>
+            <xs:documentation>Display rendering of alert including violating resources, tasks and orders.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="200"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="AlertIntervalType">
+        <xs:annotation>
+            <xs:documentation>Enumeration of the different Alerts types</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+			<xs:enumeration value="ResourceNotCompliant"/>
+			<xs:enumeration value="ResourceNotAvailable"/>
+			<xs:enumeration value="ResourceNotCheckedIn"/>
+			<xs:enumeration value="ResourceUsed"/>
+			<xs:enumeration value="ResourceOutOfScope"/>
+			<xs:enumeration value="ResourceReservedElseWhere"/>
+			<xs:enumeration value="NotAssigned"/>
+			<xs:enumeration value="NotFullyAssigned"/>
+			<xs:enumeration value="EquipmentQualificationConstraint"/>			
+			<xs:enumeration value="LinkedToOpenOrderStart"/>
+			<xs:enumeration value="LinkedToOpenOrderEnd"/>
+			<xs:enumeration value="OrderChangeCausedDifferentRulesToFire"/>
+			<xs:enumeration value="OrderTimeConstraintViolatedDueToStatus"/>
+			<xs:enumeration value="ParentTimeConstraintViolatedDueToStatus"/>
+			<xs:enumeration value="ResourceInvalid"/>
+			<xs:enumeration value="UnDefined"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="Alerts">
+        <xs:annotation>
+            <xs:documentation>Task evaluation may result in a number of Alerts. This element groups these into a repeating block. Only the first 20 alerts will be displayed</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="Alert" type="Alert" nillable="true" minOccurs="0" maxOccurs="20"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="ConstraintName">
+        <xs:annotation>
+            <xs:documentation>Name of resource constraint</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="50"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="EndTime">
+        <xs:annotation>
+            <xs:documentation>End date and time (in locale time) of Task</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:dateTime"/>
+    </xs:simpleType>
+    <xs:simpleType name="InternalID">
+        <xs:annotation>
+            <xs:documentation>RMS internally generated identifier</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:long">
+            <xs:maxInclusive value="999999999999999999"/>
+            <xs:minInclusive value="0"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="IsActive">
+        <xs:annotation>
+            <xs:documentation>Boolean that indicates whether or not Task is active.Inactive (passive) Tasks are not assigned to resources and should not be performed as part of Groundstop. Workflow triggers may be configured in service rules such that some Tasks are activated/inactivated depending on characteristics of other Tasks (same Groundstop). </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:boolean">
+            <xs:pattern value="false|true"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="Order">
+        <xs:annotation>
+            <xs:documentation>Identification of groundstop (order) that Task belongs to. Groundstop orders may be considered bills of work to be performed in-between flights. Groundstops may be either turns (arrival followed by departure), arrivals (no known departure) or departures (no known arrival)</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="InternalID" type="InternalID" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="OrderExternalID" type="OrderExternalID" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="OrgUnit" type="OrgUnit" nillable="false" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="OrderExternalID">
+        <xs:annotation>
+            <xs:documentation>The external id of groundstops is composed from flightLeg identifiers;The external id of groundstops is composed from flightLeg identifiers; ARRIVAL FLIGHT ID:DEPART FLIGHT ID Missing flight legs are noted as – . External id is only unique relative to airport as specified by orgunit element
+        </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="50"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="OrgUnit">
+        <xs:annotation>
+            <xs:documentation>Organisational Unit - all ground handler tasks relate to a position in the airport organisational unit</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="InternalID" type="OrgUnitInternalID" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="ExternalID" type="OrgUnitExternalID" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="Path" type="Path" nillable="false" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="OrgUnitInternalID">
+        <xs:annotation>
+            <xs:documentation>An internally defined id of orgunit. </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="30"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="OrgUnitExternalID">
+        <xs:annotation>
+            <xs:documentation>An externally defined id of orgunit. </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="30"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Path">
+        <xs:annotation>
+            <xs:documentation>A path-like unique identifier of Orgunits, composed from orgunit labels along path from target unit to top unit</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="50"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="Person">
+        <xs:annotation>
+            <xs:documentation>Details of a person who is assigned to the task</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="InternalID" type="InternalID" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="PersonName" type="PersonName" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="PersonExternalID" type="PersonExternalID" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="OrgUnit" type="OrgUnit" nillable="false" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="PersonExternalID">
+        <xs:annotation>
+            <xs:documentation>Typically EmployeeID</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="30"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="PersonName">
+        <xs:annotation>
+            <xs:documentation>Initials of person assigned. Display only</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="20"/>
+        </xs:restriction>
+    </xs:simpleType>
+	<xs:complexType name="Equipment">
+		<xs:annotation>
+            <xs:documentation>Details of a Equipment which is assigned to the task</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+			<xs:element name="InternalID" type="InternalID" nillable="false" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="EquipmentName" type="EquipmentName" nillable="false" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="EquipmentExternalID" type="EquipmentExternalID" nillable="false" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="OrgUnit" type="OrgUnit" nillable="false" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="EquipmentName">
+        <xs:annotation>
+            <xs:documentation>Equipment Name. Display only</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="50"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="EquipmentExternalID">
+        <xs:annotation>
+            <xs:documentation>Typically Equipment ID</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="30"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="ResourceAssignment">
+        <xs:annotation>
+            <xs:documentation>Specification of a single resource allocation</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="ConstraintName" type="ConstraintName" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:choice>
+				<xs:element name="Person" type="Person"/>
+				<xs:element name="Equipment" type="Equipment"/>
+			</xs:choice>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="ResourceAssignments">
+        <xs:annotation>
+            <xs:documentation>Tasks may be assigned to 0, 1,…20 resources</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="ResourceAssignment" type="ResourceAssignment" nillable="true" minOccurs="0" maxOccurs="20"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="ResourceConstraint">
+        <xs:annotation>
+            <xs:documentation>Defines what type of resource is required</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="ResourceConstraintName" type="ResourceConstraintName" nillable="false" minOccurs="1" maxOccurs="1"/>            
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="ResourceConstraintID">
+        <xs:annotation>
+            <xs:documentation>If alert is related to one of the defined resource constraints then the index (base 0) of it is specified here. -1 means that alert is unrelated to resource constraints</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="30"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="ResourceConstraintName">
+        <xs:annotation>
+            <xs:documentation>Name of requirement. Unique within Task. Resource assignments related to the constraint name. Typically describes the function/role that resource is to perform. e.g. “Driver”, “Truck", “RedCap”</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="20"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="ResourceConstraints">
+        <xs:annotation>
+            <xs:documentation>Tasks may require 0, 1,..20 different resources (person or equipment) for the entire duration of Task. If some resources are only required partly then separate tasks will be defined</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="ResourceConstraint" type="ResourceConstraint" nillable="true" minOccurs="0" maxOccurs="20"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="SpecialAction">
+        <xs:annotation>
+            <xs:documentation>Only special action is delete, which means that planner/dispatcher has deleted Task. Only the identification element is available when Tasks are deleted</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Delete"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="StartTime">
+        <xs:annotation>
+            <xs:documentation>Start date and time (in locale time) of Task</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:dateTime"/>
+    </xs:simpleType>
+    <xs:simpleType name="StatusType">
+        <xs:annotation>
+            <xs:documentation>Enumeration of the different types of status</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Created"/>
+            <xs:enumeration value="Scheduled"/>
+            <xs:enumeration value="Assigned"/>
+            <xs:enumeration value="Released"/>
+            <xs:enumeration value="Acknowledged"/>
+            <xs:enumeration value="Started"/>
+            <xs:enumeration value="Completed"/>
+            <xs:enumeration value="Cancelled"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="Task">
+        <xs:annotation>
+            <xs:documentation>Type that provides information about a ground handler task</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="TaskID" type="TaskID" nillable="false" minOccurs="1" maxOccurs="1"/>
+			   <xs:element name="TransactionId" type="TransactionId" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="VariantID" type="VariantID" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="TaskName" type="TaskName" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="ShortLabel" type="TaskLabel" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="Description" type="TaskDescription" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="Time" type="Time" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="Status" type="StatusType" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="IsActive" type="IsActive" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="Alerts" type="Alerts" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="ResourceConstraints" type="ResourceConstraints" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="ResourceAssignments" type="ResourceAssignments" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="SpecialAction" type="SpecialAction" nillable="true" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="TaskDescription">
+        <xs:annotation>
+            <xs:documentation>A detailed free text description of Task to be performed</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="200"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="TaskExternalID">
+        <xs:annotation>
+            <xs:documentation>External id defined by rule data. This Id is only unique within Groundstop and must therefore be complemented with Orgunit and Order.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="80"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="TaskID">
+        <xs:annotation>
+            <xs:documentation>Identifier for a ground handler task. Internal id is always sufficient for unique identification. No further information is required. Alternatively, Tasks can be identified by their external characteristics: external, orgunit and order</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="InternalID" type="InternalID" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="ExternalID" type="TaskExternalID" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="OrgUnit" type="OrgUnit" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="Order" type="Order" nillable="false" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="TaskLabel">
+        <xs:annotation>
+            <xs:documentation>A short display name of Task. This maybe null if the TaskName is the same value</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="40"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="TaskName">
+        <xs:annotation>
+            <xs:documentation>Display name of a ground handler task</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="80"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="Time">
+        <xs:annotation>
+            <xs:documentation>Information about scheduled time of execution</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="StartTime" type="StartTime" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="EndTime" type="EndTime" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="TimeConstraint" type="TimeConstraint" nillable="false" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="Duration" type="Duration" nillable="false" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="TimeConstraint">
+        <xs:annotation>
+            <xs:documentation>Constraint expression that relates Task to groundstop. Task start and finish times may be related to start or finish of groundstop. End-point constraints are noted by two letters. First letter indicates end-point of Task; second letter end-point of Order. “SS” hence  means start of task is linked to start of Order.  End-point constraint may be followed by a displacement in minutes. “SS-5” thus means that start of task should be 5 minutes before start of order. If both end-points of Task is constrained then duration element must be 0. When just one task end-point is constrained then the other is calculated using duration element.
+        </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="10"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="TransactionId">
+        <xs:annotation>
+            <xs:documentation>TransactionID of the Task</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:long">
+            <xs:maxInclusive value="999999999999999999"/>
+            <xs:minInclusive value="0"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Duration">
+        <xs:annotation>
+            <xs:documentation>Duration</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:long">
+            <xs:maxInclusive value="999999999999999999"/>
+            <xs:minInclusive value="0"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="VariantExternalID">
+        <xs:annotation>
+            <xs:documentation>All variants allow for external identification</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="50"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="VariantID">
+        <xs:annotation>
+            <xs:documentation>Task variants (subtypes) may be defined such that cleaning tasks can have different properties from fueling tasks. Subtypes are called variants.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="InternalID" type="InternalID" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="VariantExternalID" type="VariantExternalID" nillable="false" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

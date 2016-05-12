@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (c) 2012 Ultra Electronics Limited. All rights reserved. -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:cancellation="http://cancellation.core.schema.ultra-as.com" xmlns:common="http://common.schema.ultra-as.com" xmlns:hed="http://header.schema.ultra-as.com" targetNamespace="http://cancellation.core.schema.ultra-as.com" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.0">
+    <xs:annotation>
+        <xs:documentation>Integration Broker Services -  - Cancellation message.</xs:documentation>
+    </xs:annotation>
+    <xs:import namespace="http://common.schema.ultra-as.com" schemaLocation="../Common/CommonTypes.xsd"/>
+    <xs:import namespace="http://header.schema.ultra-as.com" schemaLocation="../Common/Header.xsd"/>
+    <xs:element name="Envelope">
+         <xs:annotation>
+            <xs:documentation>This is the envelope schema used for all inter-system messages. It contains a header and the body</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Header" type="hed:Header"/>
+                <xs:element name="Body" type="cancellation:Body"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>    
+    <xs:complexType name="Body">
+        <xs:sequence>
+            <xs:element name="Cancellation" type="cancellation:Cancellation"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="Cancellation">
+        <xs:annotation>
+            <xs:documentation>Sent by the service provider when a subscription is cancelled, either in response to a cancel subscription message, or sent unsolicited when an error occurs.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="DateTimeRequestReceived" type="common:DateTimeRequestReceived" nillable="true" minOccurs="0"/>
+            <xs:element name="RejectionReason" type="common:RejectionReason" nillable="true" minOccurs="0"/>
+            <xs:element name="RequestStatus" type="common:RequestStatus" nillable="false"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (c) 2012 Ultra Electronics Limited. All rights reserved. -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://backoffice.common.schema.ultra-as.com" targetNamespace="http://backoffice.common.schema.ultra-as.com" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.0">
+	<xs:annotation>
+		<xs:documentation>XML types used in messages for finance information</xs:documentation>
+	</xs:annotation>
+	<xs:simpleType name="Department">
+		<xs:annotation>
+			<xs:documentation>Name of department that the employee belongs to</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="240"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="DisplayName">
+		<xs:annotation>
+			<xs:documentation>Display name of employee</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="240"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="Email">
+		<xs:annotation>
+			<xs:documentation>Contains email Information of employee</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="EmailAddress" type="EmailAddress" nillable="false" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="PrimaryEmailAddress" type="PrimaryEmailAddress" nillable="false" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="PersonID" type="PersonID" nillable="false" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="EmailType" type="EmailType" nillable="false" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="EmailAddress">
+		<xs:annotation>
+			<xs:documentation>Email address of employee</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="240"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="EmailType">
+		<xs:annotation>
+			<xs:documentation>Email type</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="10"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="EmployeeInformation">
+		<xs:annotation>
+			<xs:documentation>Contains Employee Information</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="EmployeeType" type="EmployeeType" nillable="false" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="Department" type="Department" nillable="false" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="Location" type="Location" nillable="false" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="JobCode" type="JobCode" nillable="false" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="HiredDate" type="xs:date" nillable="false" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="JobDescription" type="JobDescription" nillable="false" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="EmployeeStatus" type="EmployeeStatus" nillable="false" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="SiteLocationCode" type="SiteLocationCode" nillable="true" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="Supervisor" type="Supervisor" nillable="false" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="TerminationDate" type="xs:date" nillable="true" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="PrimaryCalenderOrganization" type="PrimaryCalenderOrganization" nillable="false" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="LaborInformation" type="LaborInformation" nillable="false" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="Phone" type="Phone" nillable="false" minOccurs="0"/>
+			<xs:element name="Email" type="Email" nillable="false" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="EmployeeStatus">
+		<xs:annotation>
+			<xs:documentation>Status of employee</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="150"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="EmployeeType">
+		<xs:annotation>
+			<xs:documentation>Type of employee ID</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="10"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="FirstName">
+		<xs:annotation>
+			<xs:documentation>First name of employee</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="150"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="JobCode">
+		<xs:annotation>
+			<xs:documentation>Employee job code</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="240"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="JobDescription">
+		<xs:annotation>
+			<xs:documentation>Description of employee job</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="240"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="LaborInformation">
+		<xs:annotation>
+			<xs:documentation>Contains labour Information</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="PersonID" type="PersonID" nillable="false" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="OrganizationID" type="OrganizationID" nillable="true" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="LastName">
+		<xs:annotation>
+			<xs:documentation>Last name of employee</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="150"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="LeaveType">
+		<xs:annotation>
+			<xs:documentation>Type of planned leave of employee</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="30"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Location">
+		<xs:annotation>
+			<xs:documentation>Employee location</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="240"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="OrganizationID">
+		<xs:annotation>
+			<xs:documentation>Organization ID</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="8"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="PersonData">
+		<xs:annotation>
+			<xs:documentation>Collection of resource data common to backoffice data messages.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="PersonID" type="PersonID" nillable="false" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="Title" type="Title" nillable="false" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="LastName" type="LastName" nillable="false" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="FirstName" type="FirstName" nillable="false" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="DisplayName" type="DisplayName" nillable="false" minOccurs="1" maxOccurs="1"/>
+			<xs:choice>
+				<xs:element name="EmployeeInformation" type="EmployeeInformation"/>
+				<xs:element name="PlannedLeave" type="PlannedLeave"/>
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="PersonID">
+		<xs:annotation>
+			<xs:documentation>Person ID</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="30"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="Phone">
+		<xs:annotation>
+			<xs:documentation>Contains phone Information of employee</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="PrimaryPhoneNumber" type="PrimaryPhoneNumber" nillable="false" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="PersonID" type="PersonID" nillable="false" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="PhoneNumber" type="PhoneNumber" nillable="false" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="PhoneType" type="PhoneType" nillable="false" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="PhoneNumber">
+		<xs:annotation>
+			<xs:documentation>Phone number</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="60"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="PhoneType">
+		<xs:annotation>
+			<xs:documentation>Phone type</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="10"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="PlannedLeave">
+		<xs:annotation>
+			<xs:documentation>Planned leave for employee</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="LeaveType" type="LeaveType" nillable="false" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="LeaveStartDate" type="xs:date" nillable="false" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="LeaveEndDate" type="xs:date" nillable="false" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="ReplacedPersonID" type="PersonID" nillable="true" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="PrimaryCalenderOrganization">
+		<xs:annotation>
+			<xs:documentation>primary Calender Organization</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="8"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="PrimaryEmailAddress">
+		<xs:annotation>
+			<xs:documentation>Primary email address</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="1"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="PrimaryPhoneNumber">
+		<xs:annotation>
+			<xs:documentation>Primary Phone</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="1"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="SiteLocationCode">
+		<xs:annotation>
+			<xs:documentation>Site location code</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="60"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Supervisor">
+		<xs:annotation>
+			<xs:documentation>Name of supervisor</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="240"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Title">
+		<xs:annotation>
+			<xs:documentation>Title in name</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="30"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

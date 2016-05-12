@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (c) 2012 Ultra Electronics Limited. All rights reserved. -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://fault.common.schema.ultra-as.com" xmlns:common="http://common.schema.ultra-as.com" targetNamespace="http://fault.common.schema.ultra-as.com" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.0">
+	<xs:annotation>
+		<xs:documentation>XML types used in messages for fault report service</xs:documentation>
+	</xs:annotation>
+	<xs:import namespace="http://common.schema.ultra-as.com" schemaLocation="../Common/CommonTypes.xsd"/>
+	<xs:simpleType name="EquipmentData">
+		<xs:annotation>
+			<xs:documentation>Some Equipment Data</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="100"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="FaultReportID">
+		<xs:annotation>
+			<xs:documentation>Unique identifier for a fault report raised by a client. This enables the report and any subsequent reply to be matched, as they pass through the IB to the backend system and back to the client.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:integer">
+			<xs:maxInclusive value="99999999"/>
+			<xs:minInclusive value="0"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="FaultSummary">
+		<xs:annotation>
+			<xs:documentation>A free text description of a fault on a particular asset.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="255"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="FaultDateTime">
+		<xs:annotation>
+			<xs:documentation>The date and time that a fault report is raised on a client system. </xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:dateTime"/>
+	</xs:simpleType>
+	<xs:simpleType name="FaultSeverity">
+		<xs:annotation>
+			<xs:documentation>The severity of the fault</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Critical">
+				<xs:annotation>
+					<xs:documentation>This fault is severity is critical, a mission critical service is down</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="High">
+				<xs:annotation>
+					<xs:documentation>This fault severity is high, service is down</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Medium">
+				<xs:annotation>
+					<xs:documentation>This fault severity is medium, service is impacted</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Low">
+				<xs:annotation>
+					<xs:documentation>This fault severity is low, service is only minor impact</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="FaultReportStatus">
+		<xs:annotation>
+			<xs:documentation>Elements describing whether or not the request was successful</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="RequestStatus" type="common:RequestStatus"/>
+			<xs:element name="DateTimeRequestReceived" type="common:DateTimeRequestReceived" minOccurs="0"/>
+			<xs:element name="RejectionReason" type="common:RejectionReason" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="MonitoredDataItem">
+		<xs:annotation>
+			<xs:documentation>Name of the monitored data item.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="64"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="MonitoredDateTime">
+		<xs:annotation>
+			<xs:documentation>The date and time that the monitored item was taken</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:dateTime"/>
+	</xs:simpleType>
+	<xs:simpleType name="MonitorReportID">
+		<xs:annotation>
+			<xs:documentation>Monitor Report ID</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="64"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="MonitoredValue">
+		<xs:annotation>
+			<xs:documentation>Value of the monitored data item</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="50"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TroubleTicketID">
+		<xs:annotation>
+			<xs:documentation>The Trobule Ticket Number assigned to the fault. This ID is set by Service Desk and should only be used in the FMRSFaultReport where this is an update to an existing fault.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="64"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

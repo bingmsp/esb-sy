@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (c) 2011 Ultra Electronics Limited. All rights reserved. -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+ xmlns:aafusws="http://aafus.ws.schema.ultra-as.com" xmlns:get="http://getmessage.ws.schema.ultra-as.com"
+ xmlns:amr="http://acceptresponse.ws.schema.ultra-as.com" xmlns:common="http://common.schema.ultra-as.com"
+ xmlns:statusrequest="http://statusrequest.core.schema.ultra-as.com"
+ xmlns:statusresponse="http://statusresponse.core.schema.ultra-as.com"
+ targetNamespace="http://aafus.ws.schema.ultra-as.com" xmlns:aidxiata="http://www.iata.org/IATA/2007/00"
+ elementFormDefault="qualified" attributeFormDefault="unqualified"
+ version="2.0">
+ <xs:annotation>
+  <xs:documentation>Aidx Active Flights Update Service - Service Operations.
+  </xs:documentation>
+ </xs:annotation>
+ <xs:import namespace="http://statusrequest.core.schema.ultra-as.com"
+  schemaLocation="../../Core/StatusRequest.xsd" />
+ <xs:import namespace="http://getmessage.ws.schema.ultra-as.com"
+  schemaLocation="../../Common/GetMessage.xsd" />
+ <xs:import namespace="http://common.schema.ultra-as.com"
+  schemaLocation="../../Common/CommonTypes.xsd" />
+ <xs:import namespace="http://www.iata.org/IATA/2007/00"
+  schemaLocation="../IATA_AIDX_FlightLegNotifRQ.xsd" />
+ <xs:import namespace="http://www.iata.org/IATA/2007/00"
+  schemaLocation="../IATA_AIDX_FlightLegRS.xsd" />
+ <xs:import namespace="http://acceptresponse.ws.schema.ultra-as.com"
+  schemaLocation="../../Common/AcceptMessageResponse.xsd" />
+ <xs:import namespace="http://statusresponse.core.schema.ultra-as.com"
+  schemaLocation="../../Core/StatusResponse.xsd" />
+ <!-- Incoming AAFUS StatusRequest operation response parameter -->
+ <xs:element name="StatusRequest">
+  <xs:complexType>
+   <xs:sequence>
+    <xs:element ref="statusrequest:Envelope" minOccurs="1" />
+   </xs:sequence>
+  </xs:complexType>
+ </xs:element>
+ <!-- AAFUS StatusRequest operation response parameter -->
+ <xs:element name="StatusResponse">
+  <xs:complexType>
+   <xs:sequence>
+    <xs:element ref="statusresponse:Envelope" minOccurs="1" />
+   </xs:sequence>
+  </xs:complexType>
+ </xs:element>
+ <!-- Incoming AAFUS SubsciptionRequest operation parameter -->
+ <xs:element name="IATA_AIDX_FlightLegNotifRQ">
+  <xs:complexType>
+   <xs:sequence>
+    <xs:element ref="aidxiata:IATA_AIDX_FlightLegNotifRQ"
+     minOccurs="1" />
+   </xs:sequence>
+  </xs:complexType>
+ </xs:element>
+ <xs:element name="AcceptMessageResponse">
+  <xs:complexType>
+   <xs:sequence>
+    <xs:element ref="amr:Envelope" minOccurs="1" />
+   </xs:sequence>
+  </xs:complexType>
+ </xs:element>
+ <xs:element name="WSException">
+  <xs:complexType>
+   <xs:sequence>
+    <xs:element ref="common:WSException" minOccurs="1" />
+   </xs:sequence>
+  </xs:complexType>
+ </xs:element>
+ <xs:element name="GetMessage">
+  <xs:complexType>
+   <xs:sequence>
+    <xs:element ref="get:Envelope" minOccurs="1" />
+   </xs:sequence>
+  </xs:complexType>
+ </xs:element>
+ <xs:element name="GetMessageResponse">
+  <xs:complexType>
+   <xs:choice>
+    <xs:element ref="aidxiata:IATA_AIDX_FlightLegRS"
+     minOccurs="1" />
+    <xs:element ref="statusresponse:Envelope" minOccurs="1" />
+    <xs:element name="NoData" type="xs:string" default="Queue Empty"
+     minOccurs="1" />
+   </xs:choice>
+  </xs:complexType>
+ </xs:element>
+</xs:schema>

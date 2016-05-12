@@ -1,0 +1,1207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (c) 2012 Ultra Electronics Limited. All rights reserved. -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://finance.common.schema.ultra-as.com" xmlns:backoffice="http://backoffice.common.schema.ultra-as.com" targetNamespace="http://finance.common.schema.ultra-as.com" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.0">
+    <xs:annotation>
+        <xs:documentation>XML types used in messages for finance information</xs:documentation>
+    </xs:annotation>
+    <xs:import namespace="http://backoffice.common.schema.ultra-as.com" schemaLocation="../Common/BackOfficeDataTypes.xsd"/>
+    <xs:complexType name="AccountingPeriodStatus">
+        <xs:annotation>
+            <xs:documentation>Information regarding an available exchange rate</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="LedgerID" type="LedgerID" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="FinancialPeriodName" type="FinancialPeriodName" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="StartDate" type="xs:date" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="EndDate" type="xs:date" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="YearStartDate" type="xs:date" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="PeriodType" type="PeriodType" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="PeriodYear" type="PeriodYear" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="AdjustmentPeriodFlag" type="xs:boolean" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="CreationDate" type="xs:date" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="LastUpdatedDate" type="xs:date" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="PeriodStatus" type="PeriodStatus" nillable="false" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="AccountType">
+        <xs:annotation>
+            <xs:documentation>Chart of Account, account type</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="1"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="AddressLine">
+        <xs:annotation>
+            <xs:documentation>Address line</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="240"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="AreaCode">
+        <xs:annotation>
+            <xs:documentation>Area Code</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="10"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="AssetNumber">
+        <xs:annotation>
+            <xs:documentation>Asset number</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="12"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="AuthorizationStatus">
+        <xs:annotation>
+            <xs:documentation>Authorization status of the purchase order</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="25"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="AvailableBalance">
+        <xs:annotation>
+            <xs:documentation>Available balance</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:decimal">
+            <xs:minExclusive value="0"/>
+            <xs:totalDigits value="15"/>
+            <xs:fractionDigits value="2"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="BankInstructionCode">
+        <xs:annotation>
+            <xs:documentation>Bank Instruction Code</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="30"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="BankInstructionDetails">
+        <xs:annotation>
+            <xs:documentation>Additional bank instruction details</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="255"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="BillAmount">
+        <xs:annotation>
+            <xs:documentation>Bill amount</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:decimal">
+            <xs:fractionDigits value="3"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="CalenderMonth">
+        <xs:annotation>
+            <xs:documentation>Month</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="January"/>
+            <xs:enumeration value="February"/>
+            <xs:enumeration value="March"/>
+            <xs:enumeration value="April"/>
+            <xs:enumeration value="May"/>
+            <xs:enumeration value="June"/>
+            <xs:enumeration value="July"/>
+            <xs:enumeration value="August"/>
+            <xs:enumeration value="September"/>
+            <xs:enumeration value="October"/>
+            <xs:enumeration value="November"/>
+            <xs:enumeration value="December"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="CategoryID">
+        <xs:annotation>
+            <xs:documentation>category unique identifier</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="40"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="ChargeAccountSegment">
+        <xs:annotation>
+            <xs:documentation>Chart of Account Segment</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="50"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="ChartOfAccounts">
+        <xs:annotation>
+            <xs:documentation>Information regarding the Chart of Account</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="LedgerID" type="LedgerID" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="Value" type="Value" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="Description" type="Description" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="OrganizationID" type="OrganizationID" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="GLCodeCombination" type="GLCodeCombination" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="GLOrder" type="GLOrder" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="Segment" type="Segment" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="EnabledFlag" type="xs:boolean" nillable="false" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="StartDate" type="xs:date" nillable="true" minOccurs="0"/>
+            <xs:element name="EndDate" type="xs:date" nillable="true" minOccurs="0"/>
+            <xs:element name="GLEnabledFlag" type="xs:boolean" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="GLStartDate" type="xs:date" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="GLEndDate" type="xs:date" nillable="true" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="City">
+        <xs:annotation>
+            <xs:documentation>Name of the city</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="100"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="Comm">
+        <xs:annotation>
+            <xs:documentation>Communication information of supplier</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="AreaCode" type="AreaCode" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="Number" type="DeviceNumber" nillable="true" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="Comments">
+        <xs:annotation>
+            <xs:documentation>Generic type for holding comments</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="240"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="CommentsExtended">
+        <xs:annotation>
+            <xs:documentation>Generic type for holding extended comments</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="480"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="ContactDepartment">
+        <xs:annotation>
+            <xs:documentation>Supplier contact department</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="230"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="ContactFirstName">
+        <xs:annotation>
+            <xs:documentation>First name of the supplier contact</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="15"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="ContactLastName">
+        <xs:annotation>
+            <xs:documentation>Last name of the supplier contact</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="20"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="ContactMiddleName">
+        <xs:annotation>
+            <xs:documentation>Middle name of the supplier contact</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="15"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="ContactID">
+        <xs:annotation>
+            <xs:documentation>Supplier contact id</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:integer"/>
+    </xs:simpleType>
+    <xs:simpleType name="ContactSupplierSiteCode">
+        <xs:annotation>
+            <xs:documentation>Supplier site code</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="15"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="ContactTitle">
+        <xs:annotation>
+            <xs:documentation>Prefix for the supplier contact (e.g. Mr, Mrs, etc)</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="5"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="ConversionRate">
+        <xs:annotation>
+            <xs:documentation>Conversion Rate of the currency</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:decimal">
+            <xs:fractionDigits value="10"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="ConversionType">
+        <xs:annotation>
+            <xs:documentation>Corporate or User Conversion Type</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="User"/>
+            <xs:enumeration value="Corporate"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Country">
+        <xs:annotation>
+            <xs:documentation>Country of residence</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="100"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="CurrencyCode">
+        <xs:annotation>
+            <xs:documentation>Currency Unique identifier</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="15"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="CustomerBilling">
+        <xs:annotation>
+            <xs:documentation>Customer Billing Information</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="CustomerID" type="CustomerID" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="CustomerName" type="CustomerName" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="BillingMonth" type="CalenderMonth" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="Amount" type="BillAmount" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="ReBill" type="xs:boolean" nillable="true" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="CustomerID">
+        <xs:annotation>
+            <xs:documentation>Customer identifier</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="25"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="CustomerName">
+        <xs:annotation>
+            <xs:documentation>Name of the customer</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="25"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Description">
+        <xs:annotation>
+            <xs:documentation>Description of the ledger</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="50"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="DestinationTypeCode">
+        <xs:annotation>
+            <xs:documentation>Requisition Destination type</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="25"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="DeviceNumber">
+        <xs:annotation>
+            <xs:documentation>Device communication number</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="20"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="EmailAddress">
+        <xs:annotation>
+            <xs:documentation>Email address</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="200"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="EmployeeNumber">
+        <xs:annotation>
+            <xs:documentation>Employee Number who approved the PR</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="12"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="ExchangeRate">
+        <xs:annotation>
+            <xs:documentation>Information regarding an available exchange rate</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="SourceCurrency" type="CurrencyCode" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="TargetCurrency" type="CurrencyCode" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="ActiveDate" type="xs:date" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="ExpireDate" type="xs:date" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="ConversionType" type="ConversionType" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="ConversionRate" type="ConversionRate" nillable="false" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="ExpenditureType">
+        <xs:annotation>
+            <xs:documentation>Project accounting expenditure type</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="25"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="FinanceData">
+        <xs:annotation>
+            <xs:documentation>Information regarding an available exchange rate</xs:documentation>
+        </xs:annotation>
+        <xs:choice>
+            <xs:element name="ExchangeRate" type="ExchangeRate" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="AccountingPeriodStatus" type="AccountingPeriodStatus" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="ChartOfAccounts" type="ChartOfAccounts" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="ServicesReceipts" type="ServicesReceipts" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="PurchaseOrderStatus" type="PurchaseOrderStatus" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="SupplierInformation" type="SupplierInformation" minOccurs="0" maxOccurs="1"/>
+        </xs:choice>
+    </xs:complexType>
+    <xs:simpleType name="FinanceDataCategory">
+        <xs:annotation>
+            <xs:documentation>The finance data categories</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="All"/>
+            <xs:enumeration value="ExchangeRate"/>
+            <xs:enumeration value="AccountingPeriodStatus"/>
+            <xs:enumeration value="ChartOfAccounts"/>
+            <xs:enumeration value="ServicesReceipts"/>
+            <xs:enumeration value="PurchaseOrderStatus"/>
+            <xs:enumeration value="SupplierInformation"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="FinancialPeriodName">
+        <xs:annotation>
+            <xs:documentation>Name of the financial period</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="15"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="FinanceRequest">
+        <xs:annotation>
+            <xs:documentation>Information regarding a financial request made to ERP</xs:documentation>
+        </xs:annotation>
+        <xs:choice>
+            <xs:element name="PurchaseRequisition" type="PurchaseRequisition"/>
+            <xs:element name="MaintenanceWorkOrderAccount" type="MaintenanceWorkOrderAccount"/>
+            <xs:element name="CustomerBilling" type="CustomerBilling"/>
+        </xs:choice>
+    </xs:complexType>
+    <xs:simpleType name="FreightTerms">
+        <xs:annotation>
+            <xs:documentation>Describes what is being shipped</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="50"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="GeneralLedgerAccount">
+        <xs:annotation>
+            <xs:documentation>General ledger account</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="22"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="GLCodeCombination">
+        <xs:annotation>
+            <xs:documentation>General ledger account code</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="50"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="GLOrder">
+        <xs:annotation>
+            <xs:documentation>Order of this component in the General ledger account</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:integer">
+            <xs:totalDigits value="10"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="InterfaceSourceCode">
+        <xs:annotation>
+            <xs:documentation>Source of the interface row</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="25"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="InvoiceMatchMethod">
+        <xs:annotation>
+            <xs:documentation>Indicate whether invoices are matched to a PO or Receipt</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="25"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="ItemCode">
+        <xs:annotation>
+            <xs:documentation>Item code</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="180"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="ItemDescription">
+        <xs:annotation>
+            <xs:documentation>Item Description</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="240"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="ItemType">
+        <xs:annotation>
+            <xs:documentation>Item Description</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="60"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="JournalName">
+        <xs:annotation>
+            <xs:documentation>Journal name</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="80"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="JournalDescription">
+        <xs:annotation>
+            <xs:documentation>Journal Description</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="180"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="JournalLineDescription">
+        <xs:annotation>
+            <xs:documentation>Journal Line Description</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="180"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="JECategoryName">
+        <xs:annotation>
+            <xs:documentation>Journal Entry Category Name</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="25"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="JESourceName">
+        <xs:annotation>
+            <xs:documentation>Journal Entry Source Name</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="25"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="LedgerID">
+        <xs:annotation>
+            <xs:documentation>Identification of the Ledger</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:integer"/>
+    </xs:simpleType>
+    <xs:simpleType name="LicenseKey">
+        <xs:annotation>
+            <xs:documentation>Field to handle the licence key(s)r</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="80"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="LineNumber">
+        <xs:annotation>
+            <xs:documentation>Line item number</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:integer"/>
+    </xs:simpleType>
+    <xs:simpleType name="LocationCode">
+        <xs:annotation>
+            <xs:documentation>Location Code</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="60"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="LotNumber">
+        <xs:annotation>
+            <xs:documentation>Loc number</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="20"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="MaintenanceWorkOrderAccount">
+        <xs:annotation>
+            <xs:documentation>Request to ERP system from maintenance system</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="WorkOrderType" type="WorkOrderType" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="GeneralLedgerAccount" type="GeneralLedgerAccount" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="AccountingDate" type="xs:date" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="CurrencyCode" type="CurrencyCode" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="JECategoryName" type="JECategoryName" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="JESourceName" type="JESourceName" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="CurrencyConversionDate" type="xs:date" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="CurrencyConversionType" type="ConversionType" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="CurrencyConversionRate" type="ConversionRate" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="Segments" type="Segments" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="EnteredDebit" type="WorkOrderValueDecimal" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="EnteredCredit" type="WorkOrderValueDecimal" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="AccountDebit" type="WorkOrderValue" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="AccountCredit" type="WorkOrderValue" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="ServiceTransactionID" type="TransactionID" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="MaterialTransactionID" type="TransactionID" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="InventoryTransactionID" type="TransactionID" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="JournalName" type="JournalName" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="JournalDescription" type="JournalDescription" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="JournalLineDescription" type="JournalLineDescription" nillable="false" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="OrganizationID">
+        <xs:annotation>
+            <xs:documentation>Organization ID</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="8"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="PayDateBasisLookUpCode">
+        <xs:annotation>
+            <xs:documentation>Paymenr date basis lookup code</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="25"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="PaymentCode">
+        <xs:annotation>
+            <xs:documentation>Specified payment code</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="30"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="PaymentFormat">
+        <xs:annotation>
+            <xs:documentation>Payment format being transmitted</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="25"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="PaymentFormatCode">
+        <xs:annotation>
+            <xs:documentation>Default payment format code</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="150"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="PaymentMethod">
+        <xs:annotation>
+            <xs:documentation>Specified method of payment for this vendor</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="25"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="PaymentPriority">
+        <xs:annotation>
+            <xs:documentation>Payment priority of a scheduled payment (1 to 99)</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:integer">
+            <xs:minInclusive value="1"/>
+            <xs:maxInclusive value="99"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="PaymentTerms">
+        <xs:annotation>
+            <xs:documentation>Specified terms of payment for this vendor</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="50"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="PeriodStatus">
+        <xs:annotation>
+            <xs:documentation>Status of the financial period</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="30"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="PeriodType">
+        <xs:annotation>
+            <xs:documentation>Accounting Period Type</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="15"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="PeriodYear">
+        <xs:annotation>
+            <xs:documentation>Accounting Period Year</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:integer"/>
+    </xs:simpleType>
+    <xs:simpleType name="PersonRequesting">
+        <xs:annotation>
+            <xs:documentation>name of person requesting the purchase request</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="240"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="PODistributionAccount">
+        <xs:annotation>
+            <xs:documentation>GL account being debited when the item is issued</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="180"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="POorReqType">
+        <xs:annotation>
+            <xs:documentation>describes whether this item is a purchase order or requisition status</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Goods"/>
+            <xs:enumeration value="Services"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="PostCode">
+        <xs:annotation>
+            <xs:documentation>Postcode of address</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="20"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="PreparerName">
+        <xs:annotation>
+            <xs:documentation>Preparer name</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="240"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Price">
+        <xs:annotation>
+            <xs:documentation>Price of the Requisition Line, shipment or transaction</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:integer"/>
+    </xs:simpleType>
+    <xs:simpleType name="CurrencyUnitPrice">
+        <xs:annotation>
+            <xs:documentation>Price of the Requisition Line, shipment or transaction in decimal</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:decimal">
+            <xs:minExclusive value="0"/>
+            <xs:totalDigits value="10"/>
+            <xs:fractionDigits value="3"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="PurchaseOrderLineNumber">
+        <xs:annotation>
+            <xs:documentation>Number of the Purchase order line</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:integer">
+            <xs:totalDigits value="12"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="PurchaseOrderNumber">
+        <xs:annotation>
+            <xs:documentation>Identifies the purchase order record, against which receipts will be done</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="20"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="PurchaseOrderStatus">
+        <xs:annotation>
+            <xs:documentation>Status of a purchase order or requisitionin the ERP</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="Type" type="POorReqType" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="AuthorizationStatus" type="AuthorizationStatus" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="CurrencyCode" type="CurrencyCode" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="ApprovedDate" type="xs:date" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="PurchaseOrderNumber" type="PurchaseOrderNumber" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="SiteID" type="SiteID" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="VendorNumber" type="VendorNumber" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="FreightTerms" type="FreightTerms" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="PaymentTerms" type="PaymentTerms" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="ShipToLocationCode" type="LocationCode" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="BillToLocationCode" type="LocationCode" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="ExchangeRate" type="ConversionRate" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="LineNumber" type="LineNumber" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="ItemCode" type="ItemCode" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="ItemDescription" type="ItemDescription" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="Quantity" type="Quantity" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="UnitOfMeasure" type="UnitOfMeasure" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="UnitPrice" type="UnitPrice" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="PurchaseRequisitionNumber" type="RequisitionNumber" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="RequisitionLineNumber" type="RequisitionLineNumber" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="PODistributionAccount" type="PODistributionAccount" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="WorkOrderNumber" type="WorkOrderNumber" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="RequiredDeliveryDate" type="xs:date" nillable="true" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="PurchaseRequisition">
+        <xs:annotation>
+            <xs:documentation>Information regarding a purchase requisition that can be made to the ERP system</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="PRLineItem" type="PRLineItem" nillable="false" minOccurs="1" maxOccurs="10"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="PRLineItem">
+        <xs:annotation>
+            <xs:documentation>Information regarding a purchase requisition that can be made to the ERP system</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="SiteID" type="SiteID" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="RequisitionLineNumber" type="RequisitionLineNumber" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="DestinationTypeCode" type="DestinationTypeCode" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="ItemCode" type="ItemCode" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="ItemDescription" type="ItemDescription" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="Quantity" type="Quantity" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="UnitPrice" type="Price" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="AuthorizationStatus" type="AuthorizationStatus" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="StatusDate" type="xs:date" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="EmployeeNumber" type="EmployeeNumber" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="Urgent" type="xs:boolean" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="Justification" type="CommentsExtended" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="NoteToBuyer" type="CommentsExtended" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="NoteToReceiver" type="CommentsExtended" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="ChargeAccountSegment" type="ChargeAccountSegment" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="UnitOfMeasure" type="UnitOfMeasure" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="DeliveryLocationCode" type="LocationCode" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="DistributionDate" type="xs:date" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="CurrencyCode" type="CurrencyCode" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="CurrencyUnitPrice" type="CurrencyUnitPrice" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="ConversionRate" type="ConversionRate" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="InterfaceSourceCode" type="InterfaceSourceCode" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="PersonRequesting" type="PersonRequesting" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="SourceTypeCode" type="SourceTypeCode" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="VendorNumber" type="VendorNumber" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="RequestedDate" type="xs:date" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="RequisitionType" type="RequisitionType" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="UOMConversion" type="UOMConversion" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="ApproverName" type="Comments" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="NoteToApprover" type="CommentsExtended" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="StoreLocation" type="StoreLocation" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="CategoryID" type="CategoryID" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="WorkOrderNumber" type="WorkOrderNumber" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="AssetNumber" type="AssetNumber" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="AvailableBalance" type="AvailableBalance" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="NegotiatedByPreparer" type="xs:boolean" nillable="false" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="GLDate" type="xs:date" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="RequisitionNumber" type="RequisitionNumber" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="PreparerName" type="PreparerName" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="ExpenditureType" type="ExpenditureType" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="ConversionRateDate" type="xs:date" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="ConversionRateType" type="ConversionType" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="BaseUnitPrice" type="Price" nillable="true" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="Quantity">
+        <xs:annotation>
+            <xs:documentation>Quantity of the Requisition Line, shipment or transaction</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:decimal">
+            <xs:minExclusive value="0"/>
+            <xs:totalDigits value="15"/>
+            <xs:fractionDigits value="2"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="ReceiptNumber">
+        <xs:annotation>
+            <xs:documentation>Receipt number</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="20"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="ReceivedQuantity">
+        <xs:annotation>
+            <xs:documentation>Received Quantity</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:integer">
+            <xs:totalDigits value="15"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Region">
+        <xs:annotation>
+            <xs:documentation>Region where employee lives</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="100"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="RemittanceEmail">
+        <xs:annotation>
+            <xs:documentation>Remittance email</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="200"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="RemittanceMethod">
+        <xs:annotation>
+            <xs:documentation>how remittance advice is sent to the supplier</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="25"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="RequisitionLineNumber">
+        <xs:annotation>
+            <xs:documentation>Identifier of the Requisition Line</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:integer">
+            <xs:totalDigits value="12"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="RequisitionNumber">
+        <xs:annotation>
+            <xs:documentation>Requisition number</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="20"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="RequisitionType">
+        <xs:annotation>
+            <xs:documentation>Type of Requisition</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="25"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Segment">
+        <xs:annotation>
+            <xs:documentation>Ledger key flexfield segment</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="50"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Segments">
+        <xs:annotation>
+            <xs:documentation>GL Account</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="250"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="SerialNumber">
+        <xs:annotation>
+            <xs:documentation>Serial number</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="80"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="ServicesReceipts">
+        <xs:annotation>
+            <xs:documentation>Information a service receipt</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="TransactionDate" type="xs:date" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="PurchaseOrderNumber" type="PurchaseOrderNumber" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="ItemCode" type="ItemCode" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="ItemDescription" type="ItemDescription" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="TransactionUnitofMeasure" type="TransactionUnitofMeasure" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="PurchaseOrderLineNumber" type="PurchaseOrderLineNumber" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="SiteID" type="SiteID" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="ReceivedQuantity" type="ReceivedQuantity" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="WorkOrderNumber" type="WorkOrderNumber" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="ItemType" type="ItemType" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="StoreLocation" type="StoreLocation" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="ReceiptNumber" type="ReceiptNumber" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="LotNumber" type="LotNumber" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="SerialNumber" type="SerialNumber" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="LicenseKey" type="LicenseKey" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="LicenseStartDate" type="xs:date" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="LicenseExpiryDate" type="xs:date" nillable="true" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="SiteID">
+        <xs:annotation>
+            <xs:documentation>Site ID</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="MCT"/>
+            <xs:enumeration value="SLL"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="SiteCode">
+        <xs:annotation>
+            <xs:documentation>Site Code</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="15"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="SourceTypeCode">
+        <xs:annotation>
+            <xs:documentation>Requisition Source</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="25"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="StoreLocation">
+        <xs:annotation>
+            <xs:documentation>Location of the store</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="60"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="SupplierAddress">
+        <xs:annotation>
+            <xs:documentation>Contains the address of the supplier</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="AddressLine1" type="AddressLine" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="AddressLine2" type="AddressLine" nillable="false" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="AddressLine3" type="AddressLine" nillable="false" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="City" type="City" nillable="false" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="Region" type="Region" nillable="false" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="PostCode" type="PostCode" nillable="false" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="Country" type="Country" nillable="false" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="EmailAddress" type="EmailAddress" nillable="false" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="Phone" type="Comm" nillable="false" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="FAX" type="Comm" nillable="true" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="SupplierContact">
+        <xs:annotation>
+            <xs:documentation>Contains the contact details of the supplier</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="ContactID" type="ContactID" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="ContactSupplierSiteCode" type="ContactSupplierSiteCode" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="FirstName" type="ContactFirstName" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="MiddleName" type="ContactMiddleName" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="LastName" type="ContactLastName" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="Title" type="ContactTitle" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="Department" type="ContactDepartment" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="EmailAddress" type="EmailAddress" nillable="false" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="Phone" type="Comm" nillable="false" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="FAX" type="Comm" nillable="true" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="SupplierInformation">
+        <xs:annotation>
+            <xs:documentation>Contains Supplier Information</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="VendorInterfaceID" type="VendorInterfaceID" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="SupplierName" type="SupplierName" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="SupplierNumber" type="SupplierNumber" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="SupplierType" type="SupplierType" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="ShipToLocationCode" type="LocationCode" nillable="false" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="BillToLocationCode" type="LocationCode" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="PaymentTerms" type="PaymentTerms" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="InvoiceCurrencyCode" type="CurrencyCode" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="PaymentCurrencyCode" type="CurrencyCode" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="StartDate" type="xs:date" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="EndDate" type="xs:date" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="TermsDateBasis" type="TermsDateBasis" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="PaymentMethod" type="PaymentMethod" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="PaymentCode" type="PaymentCode" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="VendorID" type="VendorInterfaceID" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="SiteCode" type="SiteCode" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="DefaultPaymentSite" type="xs:boolean" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="AllowedPurchase" type="xs:boolean" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="AcceptRFQ" type="xs:boolean" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="AllowedPayment" type="xs:boolean" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="AttentionAR" type="xs:boolean" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="RemittanceEmail" type="RemittanceEmail" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="SiteShipToLocationCode" type="LocationCode" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="SiteBillToLocationCode" type="LocationCode" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="PaymentPriority" type="PaymentPriority" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="SitePaymentTerms" type="PaymentTerms" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="SiteTermsDateBasis" type="TermsDateBasis" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="SiteInvoiceCurrencyCode" type="CurrencyCode" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="SitePaymentCurrencyCode" type="CurrencyCode" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="SitePaymentMethod" type="PaymentMethod" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="PaymentFormat" type="PaymentFormat" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="RemittanceMethod" type="RemittanceMethod" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="InvoiceMatchMethod" type="InvoiceMatchMethod" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="BankInstructionCode1" type="BankInstructionCode" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="BankInstructionCode2" type="BankInstructionCode" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="BankInstructionDetails" type="BankInstructionDetails" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="PaymentFormatCode" type="PaymentFormatCode" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="PayDateBasisLookUpCode" type="PayDateBasisLookUpCode" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="Address" type="SupplierAddress" nillable="true" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="SupplierContact" type="SupplierContact" nillable="true" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="SupplierName">
+        <xs:annotation>
+            <xs:documentation>Name of the supplier</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="240"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="SupplierNumber">
+        <xs:annotation>
+            <xs:documentation>Supplier number</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="30"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="SupplierType">
+        <xs:annotation>
+            <xs:documentation>Type of the supplier</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="30"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="TermsDateBasis">
+        <xs:annotation>
+            <xs:documentation>Terms date basis</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="25"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Title">
+        <xs:annotation>
+            <xs:documentation>Title of the supplier contact</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="5"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="TransactionID">
+        <xs:annotation>
+            <xs:documentation>Transaction ID</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="10"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="TransactionUnitofMeasure">
+        <xs:annotation>
+            <xs:documentation>Transaction Unit of Measure</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="10"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="UnitOfMeasure">
+        <xs:annotation>
+            <xs:documentation>Unit of Measure</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="25"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="UnitPrice">
+        <xs:annotation>
+            <xs:documentation>Cost per unit of the item</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:integer"/>
+    </xs:simpleType>
+    <xs:simpleType name="Value">
+        <xs:annotation>
+            <xs:documentation>Chart of Account, value</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="250"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="VendorInterfaceID">
+        <xs:annotation>
+            <xs:documentation>Supplier vendor ID</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:integer"/>
+    </xs:simpleType>
+    <xs:simpleType name="VendorNumber">
+        <xs:annotation>
+            <xs:documentation>Vendor ID</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="30"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="WorkOrderNumber">
+        <xs:annotation>
+            <xs:documentation>Work Order number</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="10"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="WorkOrderType">
+        <xs:annotation>
+            <xs:documentation>Work Order Type</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Labour cost"/>
+            <xs:enumeration value="Material cost"/>
+            <xs:enumeration value="Tools cost"/>
+            <xs:enumeration value="Service cost"/>
+            <xs:enumeration value="Material Receipts"/>
+            <xs:enumeration value="Inventory transfer"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="WorkOrderValueDecimal">
+        <xs:annotation>
+            <xs:documentation>Value of the work order in decimal</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:decimal">
+            <xs:minExclusive value="0"/>
+            <xs:totalDigits value="10"/>
+            <xs:fractionDigits value="3"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="WorkOrderValue">
+        <xs:annotation>
+            <xs:documentation>Value of the work order</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:integer"/>
+    </xs:simpleType>
+    <xs:simpleType name="UOMConversion">
+        <xs:annotation>
+            <xs:documentation>UOM Conversion</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:decimal">
+            <xs:minExclusive value="0"/>
+            <xs:totalDigits value="15"/>
+            <xs:fractionDigits value="5"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

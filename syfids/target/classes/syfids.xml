@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:sftp="http://www.mulesoft.org/schema/mule/sftp" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:ws="http://www.mulesoft.org/schema/mule/ws" xmlns:smtp="http://www.mulesoft.org/schema/mule/smtp" xmlns:context="http://www.springframework.org/schema/context" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:mulexml="http://www.mulesoft.org/schema/mule/xml"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/current/mule-xml.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ws http://www.mulesoft.org/schema/mule/ws/current/mule-ws.xsd
+http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-current.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/smtp http://www.mulesoft.org/schema/mule/smtp/current/mule-smtp.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/sftp http://www.mulesoft.org/schema/mule/sftp/current/mule-sftp.xsd">
+	
+	<mulexml:namespace-manager
+        includeConfigNamespaces="true">
+	   <mulexml:namespace prefix="mule" uri="http://www.iata.org/IATA/2007/00" />
+	</mulexml:namespace-manager>
+    
+    <configuration doc:name="Configuration">
+		<expression-language autoResolveVariables="true">
+			<import class="org.mule.util.StringUtils" />
+			<import class="org.mule.util.ArrayUtils" />
+		</expression-language>
+	</configuration>
+    <context:property-placeholder location="qa.properties"/>
+    
+    <ws:consumer-config name="Web_Service_Consumer" wsdlLocation="AAFUS/ws/AAFUS.wsdl" service="AAFUS_ASync" port="AAFUSASyncPort" serviceAddress="${ultra.ws.url}" doc:name="Web Service Consumer" connectorConfig="HTTP_Request_Configuration"/>
+    
+    <db:generic-config name="Generic_Database_Configuration" url="${conString1}" driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver" doc:name="Generic Database Configuration"/>
+    <http:request-config name="HTTP_Request_Configuration" doc:name="HTTP Request Configuration">
+        <http:basic-authentication username="aodb" password="aodb"/>
+    </http:request-config>
+    <sftp:connector name="SunCountrySFTP" identityFile="${app.home}\classes\sftp_private.key" passphrase="Password1" validateConnections="true" pollingFrequency="150000" archiveDir="${sftp.archiveDir}" doc:name="SFTP">
+        <reconnect/>
+    </sftp:connector>
+
+    <flow name="IngestDataFromFlatFile">
+        <file:inbound-endpoint path="${incomingPath}" responseTimeout="10000" doc:name="File" />
+        <set-variable variableName="oFileName" value="#[message.inboundProperties.originalFilename]" doc:name="Save Original Filename"/>
+        <byte-array-to-string-transformer doc:name="Byte Array to String"/>
+        <set-variable variableName="dataHeaders" value="#[rows=StringUtils.split(message.payload, '\n\r');ArrayUtils.subarray(rows,0,1)]" doc:name="Set Headers"/>
+        <splitter expression="#[rows=StringUtils.split(message.payload, '\n\r');ArrayUtils.subarray(rows,1,rows.size())]" doc:name="Split rows to array (not including header)"/>
+        <set-variable variableName="oRowId" value="#[message.correlationSequence]" doc:name="Get Sequence ID"/>
+        <expression-transformer expression="#[message.payload.split(&quot;,&quot;)]" doc:name="Split delimiter"/>
+        <component class="com.mspmac.esb.transformer.CsvConverter" doc:name="Java"/>
+        <mulexml:dom-to-xml-transformer doc:name="DOM to XML"/>
+        <logger message="Csv Converted to: #[message.payloadAs(java.lang.String)]" level="INFO" doc:name="Logger"/>
+        <flow-ref name="AAFUSConvert" doc:name="AAFUSConvert"/>
+        <catch-exception-strategy doc:name="Catch Exception Strategy">
+            <logger message="#[exception.exceptions]" level="ERROR" doc:name="Logger"/>
+            <set-payload value="Exception occurred processing Sun Country to FIDs integration data: #['\n' + exception]" doc:name="Set Payload"/>
+            <smtp:outbound-endpoint host="${smtp.host}" port="${smtp.port}" to="${smtp.sendTo}" from="${smtp.from}" subject="${smtp.subject}" responseTimeout="10000" doc:name="SMTP"/>
+        </catch-exception-strategy>
+    </flow>
+    <sub-flow name="AAFUSConvert">
+        <mulexml:xslt-transformer xsl-file="xslt/transform.xsl" maxIdleTransformers="2" maxActiveTransformers="5" doc:name="XSLT"/>
+        <set-variable variableName="oRequest" value="#[payload]" doc:name="Save XML Request"/>
+        <logger message="&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; REQUEST: #[message.payloadAs(java.lang.String)]" level="INFO" doc:name="Logger"/>
+        <flow-ref name="InsertDb" doc:name="InsertDb"/>
+    </sub-flow>
+    <sub-flow name="DeleteFlightXml">
+        <mulexml:xslt-transformer xsl-file="xslt/deletetransform.xsl" maxIdleTransformers="2" maxActiveTransformers="5" doc:name="XSLT"/>
+        <set-variable variableName="oRequest" value="#[payload]" doc:name="Save XML Request"/>
+        <logger message="#[message.payloadAs(java.lang.String)]" level="INFO" doc:name="Logger"/>
+        <flow-ref name="InsertDb" doc:name="InsertDb"/>
+    </sub-flow>
+    <sub-flow name="InsertDb">
+        <db:insert config-ref="Generic_Database_Configuration" doc:name="Database">
+            <db:parameterized-query><![CDATA[${insertQuery}]]></db:parameterized-query>
+        </db:insert>
+        <logger message="Payload inserted to db, changing payload back to xml request" level="INFO" doc:name="Log status after db insert"/>
+        <set-payload value="#[flowVars.oRequest]" doc:name="Set payload back to xml request"/>
+        <flow-ref name="PushToUltraWebService" doc:name="PushToUltraWebService"/>
+    </sub-flow>
+    <sub-flow name="PushToUltraWebService">
+        <ws:consumer config-ref="Web_Service_Consumer" operation="IATA_AIDX_FlightLegNotifRQ" doc:name="Web Service Consumer"/>
+        <mulexml:dom-to-xml-transformer doc:name="DOM to XML"/>
+        <logger message="WS-Response: #[payload]" level="INFO" doc:name="log response from ws"/>
+        <set-variable variableName="responseMessageId" value="#[xpath3('/mule:IATA_AIDX_FlightLegRS/@CorrelationID')]" doc:name="Set Response Message Id"/>
+        <set-variable variableName="oResponse" value="#[payload]" doc:name="Save Response"/>
+        <choice doc:name="Choice">
+            <when expression="#[xpath3('count(//mule:IATA_AIDX_FlightLegRS/mule:Success)') != 0]">
+                <set-variable variableName="wsStatus" value="Success" doc:name="Set Response Status"/>
+                <logger level="INFO" doc:name="Logger" message="Successful Response: #[payload]"/>
+            </when>
+            <otherwise>
+                <set-variable variableName="wsStatus" value="Fail" doc:name="Set Response Status"/>
+                <set-attachment attachmentName="SYUltraReq-#[flowVars.responseMessageId].xml" value="#[flowVars.oRequest]" contentType="application/xml" doc:name="Attachment"/>
+                <set-payload value="Web Service Call Failed: #['\n\n']Response:#['\n']#[message.payloadAs(java.lang.String)]#['\n\n']&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;Filename: #[flowVars.oFileName]#['\n']&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;RowId: #[flowVars.oRowId]#['\n']&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;CorrelationId: #[flowVars.responseMessageId]" doc:name="Set Payload"/>
+                <logger message="#[payload]" level="INFO" doc:name="Log Failed Request"/>
+                <smtp:outbound-endpoint host="${smtp.host}" port="${smtp.port}" to="${smtp.sendTo}" from="${smtp.from}" subject="${smtp.subject}" responseTimeout="10000" doc:name="SMTP"/>
+            </otherwise>
+        </choice>
+        <flow-ref name="UpdateDb" doc:name="UpdateDb"/>
+    </sub-flow>
+    <sub-flow name="UpdateDb">
+        <db:update config-ref="Generic_Database_Configuration" doc:name="Database">
+            <db:parameterized-query><![CDATA[update SunCountryReqRes set statuscode=2 , response=#[flowVars.oResponse],status=#[flowVars.wsStatus],[timestamp]=getdate(),attempt=isnull(attempt,0)+1  where Id=#[flowVars.responseMessageId]]]></db:parameterized-query>
+        </db:update>
+        <logger message="flow complete." level="INFO" doc:name="Log flow complete"/>
+    </sub-flow>
+</mule>

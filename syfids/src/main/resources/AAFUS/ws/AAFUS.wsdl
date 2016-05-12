@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wsdl:definitions targetNamespace="http://aafus.schema.ultra-as.com" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://aafus.schema.ultra-as.com" xmlns:aafusws="http://aafus.ws.schema.ultra-as.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+	<wsdl:types>
+		<xsd:schema>
+			<xsd:import namespace="http://aafus.ws.schema.ultra-as.com" schemaLocation="AAFUSService.xsd"/>
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="AcceptMessageResponse">
+		<wsdl:part name="result" element="aafusws:AcceptMessageResponse"/>
+	</wsdl:message>
+	<wsdl:message name="GetMessage">
+		<wsdl:part name="result" element="aafusws:GetMessage"/>
+	</wsdl:message>
+	<wsdl:message name="GetMessageResponse">
+		<wsdl:part name="result" element="aafusws:GetMessageResponse"/>
+	</wsdl:message>
+	<wsdl:message name="StatusRequest">
+		<wsdl:part name="result" element="aafusws:StatusRequest"/>
+	</wsdl:message>
+	<wsdl:message name="IATA_AIDX_FlightLegNotifRQ">
+		<wsdl:part name="result" element="aafusws:IATA_AIDX_FlightLegNotifRQ"/>
+	</wsdl:message>	
+	<wsdl:message name="WSException">
+		<wsdl:part name="fault" element="aafusws:WSException"/>
+	</wsdl:message>
+	<wsdl:portType name="AAFUS_ASync">
+		<operation name="StatusRequest">
+			<input message="tns:StatusRequest"/>
+			<output message="tns:AcceptMessageResponse"/>
+			<wsdl:fault message="tns:WSException" name="WSException"/>
+		</operation>
+		<operation name="IATA_AIDX_FlightLegNotifRQ">
+			<input message="tns:IATA_AIDX_FlightLegNotifRQ"/>
+			<output message="tns:AcceptMessageResponse"/>
+			<wsdl:fault message="tns:WSException" name="WSException"/>
+		</operation>
+		<operation name="GetMessage">
+			<input message="tns:GetMessage"/>
+			<output message="tns:GetMessageResponse"/>
+			<wsdl:fault message="tns:WSException" name="WSException"/>
+		</operation>
+	</wsdl:portType>
+	<wsdl:binding name="AAFUSASyncPortBinding" type="tns:AAFUS_ASync">
+		<soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+		<wsdl:operation name="IATA_AIDX_FlightLegNotifRQ">
+			<soap:operation soapAction=""/>
+			<wsdl:input>
+				<soap:body use="literal" parts="result"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="WSException">
+				<soap:fault name="WSException" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="StatusRequest">
+			<soap:operation soapAction=""/>
+			<wsdl:input>
+				<soap:body use="literal" parts="result"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="WSException">
+				<soap:fault name="WSException" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="GetMessage">
+			<soap:operation soapAction=""/>
+			<wsdl:input>
+				<soap:body use="literal" parts="result"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="WSException">
+				<soap:fault name="WSException" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="AAFUS_ASync">
+		<port name="AAFUSASyncPort" binding="tns:AAFUSASyncPortBinding">
+			<!-- PORT is the port number which will be supplied by UEAS -->
+			<!-- ClienName is name of the client e.g. BHS -->
+			<!-- IB1 and IB2 are the physical IP address of the IB servers-->
+			<soap:address location="http://10.200.4.19:9156/AAFUSServer"/>
+			<soap:address location="http://10.200.4.19:9156/AAFUSServer"/>
+		</port>
+	</wsdl:service>
+</wsdl:definitions>

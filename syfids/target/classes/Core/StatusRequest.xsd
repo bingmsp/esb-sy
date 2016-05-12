@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (c) 2012 Ultra Electronics Limited. All rights reserved. -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:statusrequest="http://statusrequest.core.schema.ultra-as.com" xmlns:common="http://common.schema.ultra-as.com" xmlns:hed="http://header.schema.ultra-as.com" targetNamespace="http://statusrequest.core.schema.ultra-as.com" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.0">
+    <xs:annotation>
+        <xs:documentation>Integration Broker Services - Status Request message.</xs:documentation>
+    </xs:annotation>
+    <xs:import namespace="http://common.schema.ultra-as.com" schemaLocation="../Common/CommonTypes.xsd"/>
+    <xs:import namespace="http://header.schema.ultra-as.com" schemaLocation="../Common/Header.xsd"/>
+    <xs:element name="Envelope">
+        <xs:annotation>
+            <xs:documentation>This is the envelope schema used for all inter-system messages. It contains a header and the body</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Header" type="hed:Header"/>
+                <xs:element name="Body" type="statusrequest:Body"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>    
+    <xs:complexType name="Body">
+        <xs:sequence>
+            <xs:element name="StatusRequest" type="statusrequest:StatusRequest"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="StatusRequest">
+        <xs:annotation>
+            <xs:documentation>Sent by system to as the inital message to be used in the keepalive message exchange. The message is used to request status of the service. This message may be sent by the client at any time, whether or not it has subscribed.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="DateTimeStatusRequestSent" type="common:DateTimeCommonElement" nillable="true" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>
